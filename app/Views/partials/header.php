@@ -24,9 +24,9 @@
                     <li class="nav-item dropdown header-profile">
                         <a class="nav-link" href="#" role="button" data-toggle="dropdown">
                             <div class="header-info">
-                                <span>Hello, <strong>Samuel</strong></span>
+                                <span>Hello, <strong><?= session()->get('nama'); ?></strong></span>
                             </div>
-                            <img src="images/profile/pic1.jpg" width="20" alt="" />
+                            <img src="<?= base_url(); ?>/assets/images/profile/pic1.jpg" width="20" alt="" />
                         </a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <a href="./app-profile.html" class="dropdown-item ai-icon">
