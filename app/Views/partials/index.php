@@ -11,8 +11,16 @@
     <link href="<?= base_url(); ?>/assets/vendor/jqvmap/css/jqvmap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?= base_url(); ?>/assets/vendor/chartist/css/chartist.min.css">
     <link href="<?= base_url(); ?>/assets/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
+
+    <!-- DataTables -->
+    <!-- Datatable -->
+    <link href="<?= base_url(); ?>/assets/vendor/datatables/css/jquery.dataTables.min.css" rel="stylesheet">
+
     <link href="<?= base_url(); ?>/assets/css/style.css" rel="stylesheet">
     <link href="https://cdn.lineicons.com/2.0/LineIcons.css" rel="stylesheet">
+
+    <!-- Sweet Alert 2 -->
+    <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
 
 </head>
 
@@ -84,6 +92,152 @@
 
     <!-- Dashboard 1 -->
     <script src="<?= base_url(); ?>/assets/js/dashboard/dashboard-1.js"></script>
+
+    <!-- Js Sendiri -->
+    <script src="<?= base_url(); ?>/assets/js/myscript.js"></script>
+
+    <!-- SweetAlert2 -->
+    <!-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.all.min.js"></script>
+
+    <!-- Datatable -->
+    <script src="<?= base_url(); ?>/assets/vendor/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="<?= base_url(); ?>/assets/js/plugins-init/datatables.init.js"></script>
+
+    <!-- AutoNumeric -->
+    <script src="<?= base_url('assets'); ?>/js/autoNumeric.js"></script>
+
+    <script>
+        // Users
+        $('.tombol-tambah-user').on('click', function() {
+            //Ambil Inputan
+            let nama = $('#nama').val();
+            let email = $('#email').val();
+            let password = $('#password').val();
+            let role = $('#role').val();
+
+            if (nama == '') {
+                Swal.fire({
+                    title: 'Data User ',
+                    text: 'Nama Tidak Boleh Kosong !',
+                    icon: 'error'
+                })
+            } else if (email == '') {
+                Swal.fire({
+                    title: 'Data User ',
+                    text: 'Email Tidak Boleh Kosong !',
+                    icon: 'error'
+                })
+            } else if (password == '') {
+                Swal.fire({
+                    title: 'Data User ',
+                    text: 'Password Tidak Boleh Kosong !',
+                    icon: 'error'
+                })
+            } else {
+
+                //Jalankan Ajax
+                $.ajax({
+                    method: "POST",
+                    url: "<?= base_url(); ?>/users/tambahUser",
+                    data: {
+                        nama: nama,
+                        email: email,
+                        password: password,
+                        role: role
+                    },
+                    success: function(data) {
+                        if (data == "berhasil") {
+                            Swal.fire({
+                                title: 'Data User',
+                                text: 'Berhasil Add User !',
+                                icon: 'success'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "<?= base_url(); ?>/users";
+                                }
+                            })
+                        }
+
+                    }
+                });
+
+            }
+
+        });
+
+        $('.tombol-ubah-user').on('click', function() {
+            //Ambil Inputan
+
+            let id = $('#id').val();
+            let nama = $('#nama').val();
+            let email = $('#email').val();
+            let role = $('#role').val();
+            alert(id);
+
+            if (nama == '') {
+                Swal.fire({
+                    title: 'Data User ',
+                    text: 'Nama Tidak Boleh Kosong !',
+                    icon: 'error'
+                })
+            } else if (email == '') {
+                Swal.fire({
+                    title: 'Data User ',
+                    text: 'Email Tidak Boleh Kosong !',
+                    icon: 'error'
+                })
+            } else {
+
+                //Jalankan Ajax
+
+
+            }
+
+        });
+        // END USERS
+
+        // KATEGORI
+        $('.tombol-tambah-kategori').on('click', function() {
+            //Ambil Inputan
+            let kategori = $('#nama_kategori').val();
+
+            if (kategori == '') {
+                Swal.fire({
+                    title: 'Data Kategori ',
+                    text: 'Kategori Tidak Boleh Kosong !',
+                    icon: 'error'
+                })
+            } else {
+
+                //Jalankan Ajax
+                $.ajax({
+                    method: "POST",
+                    url: "<?= base_url(); ?>/master/tambahKategori",
+                    data: {
+                        kategori: kategori
+                    },
+                    success: function(data) {
+                        if (data == "berhasil") {
+                            Swal.fire({
+                                title: 'Data Kategori',
+                                text: 'Berhasil Add Kategori !',
+                                icon: 'success'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "<?= base_url(); ?>/master/kategori";
+                                }
+                            })
+                        }
+
+                    }
+                });
+
+            }
+
+        });
+        // END KATEGORI
+    </script>
 
 
 </body>

@@ -16,6 +16,19 @@ class Auth extends BaseController
 
     public function index()
     {
+
+        //Cek Apakah Ada Session
+        if (session()->get('logged_in')) {
+            if (session()->get('role_id') == 1) {
+                return redirect()->to(base_url('admin'));
+            } else if (session()->get('role_id') == 2) {
+                return redirect()->to(base_url('pelayan'));
+            } else if (session()->get('role_id') == 3) {
+                return redirect()->to(base_url('koki'));
+            } else if (session()->get('role_id') == 4) {
+                return redirect()->to(base_url('kasir'));
+            }
+        }
         $data = [
             'title' => 'RestoServe || Login',
             'validation' => \Config\Services::validation()
@@ -76,7 +89,7 @@ class Auth extends BaseController
                         return redirect()->to(base_url('admin'));
                     } else if ($user['role_id'] == 2) {
                         return redirect()->to(base_url('waiters'));
-                    } else if ($user['role_id'] == 3) {
+                    } else if ($user['role_id'] == 3 and $user['role_id'] == 5) {
                         return redirect()->to(base_url('koki'));
                     } else if ($user['role_id'] == 4) {
                         return redirect()->to(base_url('kasir'));
