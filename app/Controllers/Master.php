@@ -101,7 +101,14 @@ class Master extends BaseController
             return redirect()->to(base_url());
         } else {
             if (session()->get('role_id') != 1) {
-                return redirect()->to(base_url('kasir'));
+                //cek rolenya apa
+                if (session()->get('role_id') == 2) {
+                    return redirect()->to(base_url('pelayan'));
+                } else if (session()->get('role_id') == 3) {
+                    return redirect()->to(base_url('koki'));
+                } else if (session()->get('role_id') == 4) {
+                    return redirect()->to(base_url('kasir'));
+                }
             }
         }
 
@@ -109,7 +116,7 @@ class Master extends BaseController
         $db      = \Config\Database::connect();
         $builder = $db->table('produk');
         $builder->select('produk.*, kategori_produk.kategori');
-        $builder->join('kategori_produk', 'produk.kategori_produk = kategori_produk.id');
+        $builder->join('kategori_produk', 'produk.kategori_produk_id = kategori_produk.id');
         $query = $builder->get();
         $produk = $query->getResultArray();
         $data = [
@@ -128,7 +135,14 @@ class Master extends BaseController
             return redirect()->to(base_url());
         } else {
             if (session()->get('role_id') != 1) {
-                return redirect()->to(base_url('kasir'));
+                //cek rolenya apa
+                if (session()->get('role_id') == 2) {
+                    return redirect()->to(base_url('pelayan'));
+                } else if (session()->get('role_id') == 3) {
+                    return redirect()->to(base_url('koki'));
+                } else if (session()->get('role_id') == 4) {
+                    return redirect()->to(base_url('kasir'));
+                }
             }
         }
 
@@ -190,8 +204,7 @@ class Master extends BaseController
         if ($this->produkModel->save([
             'kode_produk' => $this->request->getVar('kode_produk'),
             'nama_produk' => $this->request->getVar('nama_produk'),
-            'satuan_produk' => $this->request->getVar('satuan_produk'),
-            'kategori_produk' => $this->request->getVar('kategori_produk'),
+            'kategori_produk_id' => $this->request->getVar('kategori_produk'),
             'modal_produk' => str_replace(',', '', $this->request->getVar('modal_produk')),
             'harga_produk' => str_replace(',', '', $this->request->getVar('harga_produk')),
             'stok_produk' => $this->request->getVar('stok_produk'),
@@ -211,7 +224,14 @@ class Master extends BaseController
             return redirect()->to(base_url());
         } else {
             if (session()->get('role_id') != 1) {
-                return redirect()->to(base_url('kasir'));
+                //cek rolenya apa
+                if (session()->get('role_id') == 2) {
+                    return redirect()->to(base_url('pelayan'));
+                } else if (session()->get('role_id') == 3) {
+                    return redirect()->to(base_url('koki'));
+                } else if (session()->get('role_id') == 4) {
+                    return redirect()->to(base_url('kasir'));
+                }
             }
         }
 
@@ -283,15 +303,13 @@ class Master extends BaseController
         if ($this->produkModel->save([
             'id' => $id,
             'nama_produk' => $this->request->getVar('nama_produk'),
-            'satuan_produk' => $this->request->getVar('satuan_produk'),
-            'kategori_produk' => $this->request->getVar('kategori_produk'),
+            'kategori_produk_id' => $this->request->getVar('kategori_produk'),
             'modal_produk' => str_replace(',', '', $this->request->getVar('modal_produk')),
             'harga_produk' => str_replace(',', '', $this->request->getVar('harga_produk')),
             'stok_produk' => $this->request->getVar('stok_produk'),
             'keterangan_produk' => $this->request->getVar('keterangan_produk'),
             'foto_produk' => $namaFoto
         ])) {
-            session()->setFlashdata('produk', 'DiUbah');
             return redirect()->to(base_url('master/produk'));
         }
     }
