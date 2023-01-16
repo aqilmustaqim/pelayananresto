@@ -11,7 +11,7 @@
     <link href="<?= base_url(); ?>/assets/vendor/jqvmap/css/jqvmap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="<?= base_url(); ?>/assets/vendor/chartist/css/chartist.min.css">
     <link href="<?= base_url(); ?>/assets/vendor/bootstrap-select/dist/css/bootstrap-select.min.css" rel="stylesheet">
-
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js" integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
     <!-- DataTables -->
     <!-- Datatable -->
     <link href="<?= base_url(); ?>/assets/vendor/datatables/css/jquery.dataTables.min.css" rel="stylesheet">
@@ -95,6 +95,9 @@
 
     <!-- Js Sendiri -->
     <script src="<?= base_url(); ?>/assets/js/myscript.js"></script>
+
+    <!-- JQUERY -->
+
 
     <!-- SweetAlert2 -->
     <!-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
@@ -237,6 +240,57 @@
 
         });
         // END KATEGORI
+
+        // MEJA
+        $('.tombol-tambah-meja').on('click', function() {
+            //Ambil Inputan
+            let meja = $('#nomor_meja').val();
+
+            if (meja == '') {
+                Swal.fire({
+                    title: 'Data Meja ',
+                    text: 'Nomor Meja Tidak Boleh Kosong !',
+                    icon: 'error'
+                })
+            } else {
+
+                //Jalankan Ajax
+                $.ajax({
+                    method: "POST",
+                    url: "<?= base_url(); ?>/master/tambahMeja",
+                    data: {
+                        meja: meja
+                    },
+                    success: function(data) {
+                        if (data == "berhasil") {
+                            Swal.fire({
+                                title: 'Data Meja',
+                                text: 'Berhasil Add Meja !',
+                                icon: 'success'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "<?= base_url(); ?>/master/kelolameja";
+                                }
+                            })
+                        } else {
+                            Swal.fire({
+                                title: 'Data Meja',
+                                text: 'Meja Sudah Ada ! ',
+                                icon: 'error'
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.href = "<?= base_url(); ?>/master/kelolameja";
+                                }
+                            })
+                        }
+
+                    }
+                });
+
+            }
+
+        });
+        // END MEJA
     </script>
 
 

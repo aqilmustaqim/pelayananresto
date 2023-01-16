@@ -9,6 +9,7 @@ use \App\Models\KategoriModel;
 use \App\Models\SatuanModel;
 use \App\Models\ProdukModel;
 use \App\Models\KasKeluarModel;
+use \App\Models\MejaModel;
 use TCPDF;
 
 class Master extends BaseController
@@ -19,6 +20,7 @@ class Master extends BaseController
     protected $userRole;
     protected $kategoriModel;
     protected $produkModel;
+    protected $mejaModel;
 
     public function __construct()
     {
@@ -27,6 +29,7 @@ class Master extends BaseController
         $this->userRole = new UserRoleModel();
         $this->kategoriModel = new KategoriModel();
         $this->produkModel = new ProdukModel();
+        $this->mejaModel = new MejaModel();
     }
 
     public function kategori()
@@ -36,7 +39,14 @@ class Master extends BaseController
             return redirect()->to(base_url());
         } else {
             if (session()->get('role_id') != 1) {
-                return redirect()->to(base_url('kasir'));
+                //cek rolenya apa
+                if (session()->get('role_id') == 2) {
+                    return redirect()->to(base_url('pelayan'));
+                } else if (session()->get('role_id') == 3) {
+                    return redirect()->to(base_url('koki'));
+                } else if (session()->get('role_id') == 4) {
+                    return redirect()->to(base_url('kasir'));
+                }
             }
         }
 
@@ -88,6 +98,73 @@ class Master extends BaseController
     }
 
 
+    public function kelolameja()
+    {
+        if (!session()->has('logged_in')) {
+            session()->setFlashdata('login', 'Silahkan Login Terlebih Dahulu !');
+            return redirect()->to(base_url());
+        } else {
+            if (session()->get('role_id') != 1) {
+                //cek rolenya apa
+                if (session()->get('role_id') == 2) {
+                    return redirect()->to(base_url('pelayan'));
+                } else if (session()->get('role_id') == 3) {
+                    return redirect()->to(base_url('koki'));
+                } else if (session()->get('role_id') == 4) {
+                    return redirect()->to(base_url('kasir'));
+                }
+            }
+        }
+
+        $meja = $this->mejaModel->findAll();
+
+        $data = [
+            'title' => 'RestoServe || Kelola Meja',
+            'validation' => \Config\Services::validation(),
+            'meja' => $meja
+        ];
+
+        return view('master/kelolameja', $data);
+    }
+
+    public function tambahMeja()
+    {
+        //Tangkap Data
+        $meja = $this->request->getVar('meja');
+
+        //Masukkan Ke Database 
+        if ($this->mejaModel->save([
+            'nomor_meja' => $meja,
+            'status_meja' => 0
+        ])) {
+            echo 'berhasil';
+        } else {
+            echo 'gagal';
+        }
+    }
+
+    // public function ubahKategori()
+    // {
+    //     //Ambil Data
+    //     $id = $this->request->getVar('id');
+    //     $kategori = $this->request->getVar('kategori');
+
+    //     //Ubah Database Kategori
+    //     if ($this->kategoriModel->save([
+    //         'id' => $id,
+    //         'kategori' => $kategori
+    //     ])) {
+    //         echo '1';
+    //     }
+    // }
+
+    public function hapusmeja($id)
+    {
+        //Hapus
+        if ($this->kategoriModel->delete($id)) {
+            return redirect()->to(base_url('master/kategori'));
+        }
+    }
 
 
 

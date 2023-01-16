@@ -1,4 +1,6 @@
 
+
+
 //Flash Data
 const swal = $('.users').data('users'); //Ambil Data FlashDatanya
 if ( swal ){

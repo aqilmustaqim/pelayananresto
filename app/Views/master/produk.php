@@ -65,4 +65,10 @@
 <!--**********************************
             Content body end
 ***********************************-->
+
+<script>
+    $(document).ready(function() {
+        $('#main-wrapper').addClass('menu-toggle');
+    })
+</script>
 <?= $this->endSection(); ?>

@@ -14,7 +14,7 @@
                 </a>
                 <ul aria-expanded="false">
                     <li><a href="<?= base_url(); ?>/master/produk">Produk</a></li>
-                    <li><a href="<?= base_url(); ?>/master/satuan">Satuan</a></li>
+                    <li><a href="<?= base_url(); ?>/master/kelolameja">Kelola Meja</a></li>
                     <li><a href="<?= base_url(); ?>/master/kategori">Kategori</a></li>
                     <li><a href="<?= base_url(); ?>/master/kasKeluar">Kas Keluar</a></li>
                 </ul>
