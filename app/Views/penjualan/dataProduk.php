@@ -10,7 +10,40 @@
             </div>
 
 
+            <div class="table-responsive">
+                <table class="table table-sm mb-0 table-striped">
 
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>No</th>
+                            <th>Kode</th>
+                            <th>Produk</th>
+                            <th>Kategori</th>
+                            <th>Stok</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $nomor = 1; ?>
+                        <?php foreach ($produk as $p) : ?>
+                            <tr>
+                                <td><button class="badge badge-grey"><?= $nomor++; ?></button></td>
+                                <td><?= $p['kode_produk']; ?></td>
+                                <td><?= $p['nama_produk']; ?></td>
+                                <td><?= $p['kategori']; ?></td>
+                                <td>
+                                    <button class="badge badge-success">Tersedia</button>
+                                </td>
+                                <td>
+                                    <button class="badge badge-primary" type="button" onclick="pilihProduk('<?= $p['kode_produk']; ?>','<?= $p['nama_produk']; ?>')">Pilih</button>
+                                </td>
+                            </tr>
+
+
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
 
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -25,6 +58,11 @@
         //Masukkan Kode Produk Dan Nama Produk Ke Inputan 
         $('#kodeproduk').val(kode);
         $('#namaproduk').val(nama);
+
+        // Fokus Modal Produk
+        $('#modalproduk').on('hidden.bs.modal', function(event) {
+            $('#modalproduk').focus();
+        })
 
         //Hide Modal
         $('#modalproduk').modal('hide');

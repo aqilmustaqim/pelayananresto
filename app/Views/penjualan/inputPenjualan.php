@@ -73,7 +73,7 @@
                                     </div>
                                     <div class="form-group col-lg-6">
                                         <label for="" style="font-weight: bold;">Nama Produk</label>
-                                        <input type="text" name="nama_produk" class="form-control input-rounded" style="border: 1px solid #000000;" id="namaproduk" readonly>
+                                        <input type="text" name="nama_produk" class="form-control input-rounded" style="border: 1px solid #000000; font-weight:bold;" id="namaproduk" readonly>
                                     </div>
 
 
