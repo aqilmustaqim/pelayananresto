@@ -34,3 +34,34 @@
 
     </table>
 </div>
+
+<script>
+    function hapusItem(id, namaproduk) {
+        Swal.fire({
+            title: 'Apakah Anda Yakin?',
+            html: `Produk <strong>${namaproduk}</strong> Akan DiHapus`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Iya, Hapus!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                //jalankan ajax hapus
+                $.ajax({
+                    type: "post",
+                    url: "<?= base_url() ?>/penjualan/hapusItem",
+                    data: {
+                        id: id
+                    },
+                    success: function(response) {
+                        if (response == "sukses") {
+                            dataDetailPenjualan();
+                            kosongkanField();
+                        }
+                    }
+                });
+            }
+        })
+    }
+</script>

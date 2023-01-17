@@ -7,5 +7,5 @@ use CodeIgniter\Model;
 class PenjualanModel extends Model
 {
     protected $table      = 'penjualan';
-    protected $allowedFields = ['id_meja', 'invoice', 'tanggal', 'pelanggan', 'waiters', 'status_pesanan', 'status_pembayaran', 'total'];
+    protected $allowedFields = ['id_meja', 'invoice', 'tanggal', 'pelanggan', 'waiters', 'status_pesanan', 'status_pembayaran', 'tipe_pesanan', 'total'];
 }

@@ -33,8 +33,27 @@
                                 <label for="" style="font-weight: bold;">Pelanggan</label>
                                 <input type="text" id="nama_pelanggan" name="nama_pelanggan" class="form-control input-rounded" placeholder="Nama Pelanggan...">
                             </div>
+                            <div class="form-group input-primary col-lg-6">
+                                <label for="" style="font-weight: bold;">Pilih Meja (0 Jika Take Away)...</label>
+                                <select id="meja" class="form-control input-rounded" style="border: 1px solid #000000;" name="meja">
+
+                                    <?php foreach ($meja as $m) :  ?>
+                                        <option value="<?= $m['id']; ?>"> <b><?= $m['nomor_meja']; ?></b></option>
+                                    <?php endforeach; ?>
+                                </select>
+
+                            </div>
+                            <div class="form-group input-primary col-lg-6">
+                                <label for="" style="font-weight: bold;">Pilih Pelayanan ...</label>
+                                <select id="tipe_pesanan" class="form-control input-rounded" style="border: 1px solid #000000;" name="meja">
+                                    <option value="1"> <b>Dine In</b></option>
+                                    <option value="2"> <b>Take Away</b></option>
+                                </select>
+
+                            </div>
 
                         </div>
+
 
                     </div>
                     <div class="card-body">
@@ -117,12 +136,15 @@
 
         dataDetailPenjualan();
 
+        tampilTotalBayar();
+
         $('#kodeproduk').keydown(function(e) {
             if (e.keyCode == 13) {
                 e.preventDefault();
                 cekKodeProduk();
             }
         });
+
     })
 
 
@@ -182,6 +204,142 @@
             });
         }
     }
+
+    $('.tombolTambahKeranjang').on('click', function() {
+        //Ambil Isi Field 
+        let kodeproduk = $('#kodeproduk').val();
+        let namaproduk = $('#namaproduk').val();
+        let invoice = $('#invoice').val();
+        let jumlah = $('#jumlah').val();
+
+        if (kodeproduk == '') {
+            Swal.fire({
+                title: 'Kode Produk',
+                text: 'Tidak Boleh Kosong',
+                icon: 'warning'
+            });
+        } else if (jumlah == '') {
+            Swal.fire({
+                title: 'Jumlah Produk',
+                text: 'Tidak Boleh Kosong',
+                icon: 'warning'
+            });
+        } else {
+            //Jalankan Ajax
+            $.ajax({
+                type: "post",
+                url: "<?= base_url(); ?>/penjualan/simpanTemp",
+                data: {
+                    kodeproduk: kodeproduk,
+                    namaproduk: namaproduk,
+                    invoice: invoice,
+                    jumlah: jumlah
+                },
+                dataType: "json",
+                success: function(response) {
+                    if (response == "1") {
+                        //Tampilkan Detailnya 
+                        dataDetailPenjualan();
+                        //Ketika Sudah Ditambahkan Kosongkan Field Nya
+                        kosongkanField();
+                    }
+                }
+            });
+        }
+    });
+
+    function kosongkanField() {
+
+        $('#kodeproduk').val('');
+        $('#namaproduk').val('');
+        $('#jumlah').val('');
+        $('#namaproduk').focus();
+
+        //setelah dikosongkan tampilkanTotalBayar
+        tampilTotalBayar();
+    }
+
+    function tampilTotalBayar() {
+        //Jalankan Ajax
+        let invoice = $('#invoice').val();
+        $.ajax({
+            type: "post",
+            url: "<?= base_url(); ?>/penjualan/tampilTotalBayar",
+            data: {
+                //Ambil Data Invoice saja, karena yang akan di ambil jika invoice nya sama
+                invoice: invoice
+            },
+            dataType: "json",
+            success: function(response) {
+                if (response.totalbayar) {
+                    $('#total_bayar').val(response.totalbayar);
+                }
+            }
+        });
+    }
+
+    $('#simpanPenjualan').on('click', function() {
+        //Cek Nama Pelanggan Kalau Diisi Maka Ambil Value nya kalau tidak diisi isi value nya umum
+        let namaPelanggan = $('#nama_pelanggan').val();
+        let total = $('#total_bayar').val();
+        if (namaPelanggan == '') {
+            Swal.fire({
+                title: 'Nama Pelanggan',
+                text: 'Jika Nama Pelanggan Kosong Maka Secara Automatis Akan Dibuat "Umum"',
+                icon: 'warning'
+            });
+            namaPelanggan = $('#nama_pelanggan').val('Umum');
+        } else {
+            //Kasi Sweet Alert Konfirmasi
+            Swal.fire({
+                title: 'Apakah Anda Yakin?',
+                html: `Transaksi Akan Di Proses`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Iya, Proses !'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    //Jalankan Ajax
+                    $.ajax({
+                        type: "post",
+                        url: "<?= base_url(); ?>/penjualan/simpanPenjualan",
+                        data: {
+                            invoice: $('#invoice').val(),
+                            waiters: $('#waiters').val(),
+                            pelanggan: namaPelanggan,
+                            meja: $('#meja').val(),
+                            tipepesanan: $('#tipe_pesanan').val(),
+                            total: $('#total_bayar').val()
+                        },
+                        dataType: "json",
+                        success: function(data) {
+                            if (data == "1") {
+                                Swal.fire({
+                                    title: 'Input Penjualan',
+                                    text: 'Berhasil Di Proses',
+                                    icon: 'success'
+                                }).then((result) => {
+                                    document.location.reload();
+                                })
+
+                            }
+                            //Tampilkan Modal
+                            //$('.modalPembayaran').html(response.viewmodal).show();
+
+                            //$('#modalPembayaran').modal('show');
+                        }
+                    });
+                }
+            })
+        }
+
+
+
+
+
+    });
 </script>
 
 <?= $this->endSection(); ?>

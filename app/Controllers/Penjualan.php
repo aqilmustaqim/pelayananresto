@@ -10,6 +10,7 @@ use \App\Models\TempPenjualanModel;
 use \App\Models\ProdukModel;
 use \App\Models\PenjualanModel;
 use \App\Models\PenjualanDetailModel;
+use \App\Models\MejaModel;
 use PhpParser\Node\Expr\Cast\Array_;
 use TCPDF;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
@@ -27,16 +28,18 @@ class Penjualan extends BaseController
 	protected $produkModel;
 	protected $penjualanModel;
 	protected $penjualanDetailModel;
+	protected $mejaModel;
 
 	public function __construct()
 	{
 		//Masukkan Users Model Ke Dalam Variabel
 		$this->usersModel = new UsersModel();
 		$this->userRole = new UserRoleModel();
-		// $this->tempPenjualanModel = new TempPenjualanModel();
+		$this->tempPenjualanModel = new TempPenjualanModel();
 		$this->produkModel = new ProdukModel();
-		// $this->penjualanModel = new PenjualanModel();
-		// $this->penjualanDetailModel = new PenjualanDetailModel();
+		$this->penjualanModel = new PenjualanModel();
+		$this->penjualanDetailModel = new PenjualanDetailModel();
+		$this->mejaModel = new MejaModel();
 	}
 
 	public function inputPenjualan()
@@ -47,10 +50,13 @@ class Penjualan extends BaseController
 			return redirect()->to(base_url());
 		}
 
+		$meja = $this->mejaModel->where('status_meja', 0)->findAll();
+
 		$data = [
 			'title' => 'RestoServe || Input Penjualan',
 			'validation' => \Config\Services::validation(),
-			'invoice' => $this->buatInvoice()
+			'invoice' => $this->buatInvoice(),
+			'meja' => $meja
 		];
 
 		return view('penjualan/inputPenjualan', $data);
@@ -122,131 +128,175 @@ class Penjualan extends BaseController
 		}
 	}
 
-	// public function dataProduk2()
-	// {
-	// 	$kodeproduk = $this->request->getPost('kodeproduk');
-	// 	$namaproduk = $this->request->getPost('namaproduk');
+	public function dataProduk2()
+	{
+		$kodeproduk = $this->request->getVar('kodeproduk');
+		$namaproduk = $this->request->getVar('namaproduk');
 
-	// 	//Ambil Data Produk JOIN dengan Kategori Produk
-	// 	$db      = \Config\Database::connect();
-	// 	$builder = $db->table('produk');
-	// 	$builder->select('produk.id,kode_produk,nama_produk,kategori_produk,kategori,stok_produk');
-	// 	$builder->join('kategori', 'produk.kategori_produk = kategori.id');
-	// 	$builder->like('kode_produk', $kodeproduk);
-	// 	$builder->orLike('nama_produk', $kodeproduk);
-	// 	$query = $builder->get();
-	// 	$hasil = $query->getResultArray();
+		//Ambil Data Produk JOIN dengan Kategori Produk
+		$db      = \Config\Database::connect();
+		$builder = $db->table('produk');
+		$builder->select('produk.id,kode_produk,nama_produk,kategori_produk_id,kategori,stok_produk');
+		$builder->join('kategori_produk', 'produk.kategori_produk_id = kategori_produk.id');
+		$builder->where('stok_produk', 1);
+		$builder->like('kode_produk', $kodeproduk);
+		$builder->orLike('nama_produk', $kodeproduk);
+		$query = $builder->get();
+		$hasil = $query->getResultArray();
+		$data = [
+			'produk' => $hasil
+		];
+		if ($this->request->isAJAX()) {
+			//Arahkan Ke View Data Produk
+			$msg = [
+				'viewmodal' => view('penjualan/dataProduk', $data)
+			];
+			echo json_encode($msg);
+		}
+	}
 
-	// 	$data = [
-	// 		'produk' => $hasil
-	// 	];
-	// 	if ($this->request->isAJAX()) {
-	// 		//Arahkan Ke View Data Produk
-	// 		$msg = [
-	// 			'viewmodal' => view('penjualan/dataProduk', $data)
-	// 		];
-	// 		echo json_encode($msg);
-	// 	}
-	// }
+	public function simpanTemp()
+	{
+		//Tangkap Data
+		$kodeproduk = $this->request->getPost('kodeproduk');
+		$namaproduk = $this->request->getPost('namaproduk');
+		$jumlah = $this->request->getPost('jumlah');
+		$invoice = $this->request->getPost('invoice');
+		//Ambil Harga Produknya Dulu
+		$infoProduk = $this->produkModel->where(['kode_produk' => $kodeproduk])->first();
+		$subtotal = floatval($infoProduk['harga_produk']) * $jumlah;
+		//Masukkan Ke Database
+		if ($this->tempPenjualanModel->save([
+			'invoice' => $invoice,
+			'id_produk' => $infoProduk['id'],
+			'jumlah' => $jumlah,
+			'harga_beli' => $infoProduk['modal_produk'],
+			'harga_jual' => $infoProduk['harga_produk'],
+			'subtotal' => $subtotal
+		])) {
+			echo "1";
+		}
+	}
 
-	// public function simpanTemp()
-	// {
-	// 	//Tangkap Data
-	// 	$kodeproduk = $this->request->getPost('kodeproduk');
-	// 	$namaproduk = $this->request->getPost('namaproduk');
-	// 	$jumlah = $this->request->getPost('jumlah');
-	// 	$invoice = $this->request->getPost('invoice');
-	// 	//Ambil Harga Produknya Dulu
-	// 	$infoProduk = $this->produkModel->where(['kode_produk' => $kodeproduk])->first();
-	// 	$subtotal = floatval($infoProduk['harga_produk']) * $jumlah;
-	// 	//Masukkan Ke Database
-	// 	if ($this->tempPenjualanModel->save([
-	// 		'invoice' => $invoice,
-	// 		'kode_produk' => $kodeproduk,
-	// 		'jumlah' => $jumlah,
-	// 		'harga_beli' => $infoProduk['modal_produk'],
-	// 		'harga_jual' => $infoProduk['harga_produk'],
-	// 		'subtotal' => $subtotal
-	// 	])) {
-	// 		echo "1";
-	// 	}
-	// }
+	public function tampilTotalBayar()
+	{
 
-	// public function tampilTotalBayar()
-	// {
+		if ($this->request->isAJAX()) {
+			//Kalau ada request dari ajax
+			//Tangkap Data Yang Dikirim Ajax
+			$invoice = $this->request->getPost('invoice');
 
-	// 	if ($this->request->isAJAX()) {
-	// 		//Kalau ada request dari ajax
-	// 		//Tangkap Data Yang Dikirim Ajax
-	// 		$invoice = $this->request->getPost('invoice');
+			//Jalankan Query SUM untuk jumlah total detailpesanan
+			$db      = \Config\Database::connect();
+			$builder = $db->table('temp_penjualan');
+			$builder->select('SUM(subtotal) as totalbayar');
+			$builder->where('invoice', $invoice);
+			$query = $builder->get();
+			$hasil = $query->getRowArray();
 
-	// 		//Jalankan Query SUM untuk jumlah total detailpesanan
-	// 		$db      = \Config\Database::connect();
-	// 		$builder = $db->table('temp_penjualan');
-	// 		$builder->select('SUM(subtotal) as totalbayar');
-	// 		$builder->where('invoice', $invoice);
-	// 		$query = $builder->get();
-	// 		$hasil = $query->getRowArray();
+			$msg = [
+				'totalbayar' => number_format($hasil['totalbayar'], 0, ",", ".")
+			];
+			echo json_encode($msg);
+		}
+	}
 
-	// 		$msg = [
-	// 			'totalbayar' => number_format($hasil['totalbayar'], 0, ",", ".")
-	// 		];
-	// 		echo json_encode($msg);
-	// 	}
-	// }
+	public function hapusItem()
+	{
 
-	// public function hapusItem()
-	// {
+		if ($this->request->isAJAX()) {
+			//Kalau Ada Request Ajax
+			//Tangkap Data Dikirim Ajax
+			$id = $this->request->getPost('id');
 
-	// 	if ($this->request->isAJAX()) {
-	// 		//Kalau Ada Request Ajax
-	// 		//Tangkap Data Dikirim Ajax
-	// 		$id = $this->request->getPost('id');
+			//Hapus Data Produk Berdasarkan ID 
+			if ($this->tempPenjualanModel->delete($id)) {
+				echo "sukses";
+			}
+		}
+	}
 
-	// 		//Hapus Data Produk Berdasarkan ID 
-	// 		if ($this->tempPenjualanModel->delete($id)) {
-	// 			echo "sukses";
-	// 		}
-	// 	}
-	// }
+	public function simpanPenjualan()
+	{
+		//Ambil Data Ajax
+		$waiters  = $this->request->getPost('waiters');
+		$invoice = $this->request->getPost('invoice');
+		$pelanggan = $this->request->getPost('pelanggan');
+		$meja = $this->request->getPost('meja');
+		$tipepesanan = $this->request->getPost('tipepesanan');
 
-	// public function simpanPenjualan()
-	// {
-	// 	//Ambil Data Ajax
-	// 	$kasir  = $this->request->getPost('kasir');
-	// 	$invoice = $this->request->getPost('invoice');
-	// 	$pelanggan = $this->request->getPost('pelanggan');
+		$infomeja = $this->mejaModel->where('id', $meja)->first();
 
-	// 	//Cek Apakah Ada Data Detail Penjualannya ?
-	// 	$isiTempPenjualan = $this->tempPenjualanModel->where(['invoice' => $invoice])->first();
+		//Jalankan Query SUM untuk jumlah total detailpesanan
+		$db      = \Config\Database::connect();
+		$builder = $db->table('temp_penjualan');
+		$builder->select('SUM(subtotal) as total');
+		$builder->where('invoice', $invoice);
+		$query = $builder->get();
+		$total = $query->getRowArray();
 
-	// 	//Jalankan Query SUM untuk jumlah total detailpesanan
-	// 	$db      = \Config\Database::connect();
-	// 	$builder = $db->table('temp_penjualan');
-	// 	$builder->select('SUM(subtotal) as totalbayar');
-	// 	$builder->where('invoice', $invoice);
-	// 	$query = $builder->get();
-	// 	$hasil = $query->getRowArray();
+		//Masukkan Ke Database Penjualan
+		if ($this->penjualanModel->save([
+			'id_meja' => $meja,
+			'invoice' => $invoice,
+			'tanggal' => date('Y-m-d'),
+			'pelanggan' => $pelanggan,
+			'total' => $total['total'],
+			'waiters' => $waiters,
+			'status_pesanan' => 0,
+			'status_pembayaran' => 0,
+			'tipe_pesanan' => $tipepesanan
+		])) {
+			// 	//Kalau Berhasil
+			// 	//Masukkan Ke Database Penjualan Detail Dari Tabel Temp
+			$db      = \Config\Database::connect();
+			$builder = $db->table('temp_penjualan');
+			$builder->where('invoice', $invoice);
+			$query = $builder->get();
+			$isiTempPenjualan = $query->getResultArray();
 
+			$DetailPenjualan = [];
+			foreach ($isiTempPenjualan as $row) {
+				$DetailPenjualan[] = [
+					'invoice' => $row['invoice'],
+					'id_produk' => $row['id_produk'],
+					'harga_beli' => $row['harga_beli'],
+					'harga_jual' => $row['harga_jual'],
+					'jumlah' => $row['jumlah'],
+					'subtotal' => $row['subtotal'],
+					'status_menu' => 0
+				];
+			}
+			$db      = \Config\Database::connect();
+			$builder = $db->table('penjualan_detail');
+			$builder->insertBatch($DetailPenjualan);
 
-	// 	if ($isiTempPenjualan) {
-	// 		//Arahkan Ke View Modal Pembayaran
-	// 		//Query Total Bayar Dari Tabel TempPenjualan
+			//Ubah Data Meja
+			if ($infomeja['nomor_meja'] != 0) {
+				$this->mejaModel->save([
+					'id' => $meja,
+					'status_meja' => 1
+				]);
+			}
 
-	// 		$data = [
-	// 			'totalbayar' => $hasil['totalbayar'],
-	// 			'kasir' => $kasir,
-	// 			'invoice' => $invoice,
-	// 			'pelanggan' => $pelanggan
+			//Hapus Temp
+			$db      = \Config\Database::connect();
+			$builder = $db->table('temp_penjualan');
+			$builder->emptyTable();
 
-	// 		];
-
-	// 		$msg = [
-	// 			'viewmodal' => view('penjualan/modalPembayaran', $data)
-	// 		];
-	// 		echo json_encode($msg);
-	// 	}
-	// }
+			//Masukkan Data Penjualan Ke Session Untuk Di Cetak Ke Struk
+			// $dataPenjualan = [
+			// 	'invoice' => $invoice,
+			// 	'pelanggan' => $pelanggan,
+			// 	'kasir' => $kasir,
+			// 	'total' => $total,
+			// 	'jumlah_uang' => $jumlahUang,
+			// 	'sisa_uang' => $sisaUang
+			// ];
+			// session()->set($dataPenjualan);
+		}
+		echo '1';
+	}
 
 	// public function simpanPembayaran()
 	// {

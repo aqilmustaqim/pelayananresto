@@ -32,11 +32,17 @@
                                 <td><?= $p['nama_produk']; ?></td>
                                 <td><?= $p['kategori']; ?></td>
                                 <td>
-                                    <button class="badge badge-success">Tersedia</button>
+                                    <?php if ($p['stok_produk'] == 1) { ?>
+                                        <button class="badge badge-success">Tersedia</button>
+                                    <?php } else { ?>
+                                        <button class="badge badge-danger">Kosong</button>
+                                    <?php } ?>
                                 </td>
-                                <td>
-                                    <button class="badge badge-primary" type="button" onclick="pilihProduk('<?= $p['kode_produk']; ?>','<?= $p['nama_produk']; ?>')">Pilih</button>
-                                </td>
+                                <?php if ($p['stok_produk'] == 1) : ?>
+                                    <td>
+                                        <button class="badge badge-primary" type="button" onclick="pilihProduk('<?= $p['kode_produk']; ?>','<?= $p['nama_produk']; ?>')">Pilih</button>
+                                    </td>
+                                <?php endif; ?>
                             </tr>
 
 

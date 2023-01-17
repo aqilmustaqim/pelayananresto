@@ -39,6 +39,15 @@
                     </ul>
                 </li>
             <?php endif; ?>
+            <li>
+                <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                    <i class="flaticon-381-controls-3"></i>
+                    <span class="nav-text">Dapur</span>
+                </a>
+                <ul aria-expanded="false">
+                    <li><a href="<?= base_url(); ?>/dapur">Kelola Pesanan</a></li>
+                </ul>
+            </li>
         </ul>
 
         <br>

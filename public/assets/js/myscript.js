@@ -1,4 +1,21 @@
-
+//Auto Numeric
+$(document).ready(function() {
+  $('#modal').autoNumeric('init', {
+      aSep: ',',
+      aDec: '.',
+      mDec: '0'
+  });
+  $('#harga_jual').autoNumeric('init', {
+    aSep: ',',
+    aDec: '.',
+    mDec: '0'
+});
+$('#nominal_kas').autoNumeric('init', {
+  aSep: ',',
+  aDec: '.',
+  mDec: '0'
+});
+});
 
 
 //Flash Data
