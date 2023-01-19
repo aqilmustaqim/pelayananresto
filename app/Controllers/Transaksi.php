@@ -11,7 +11,7 @@ use \App\Models\PenjualanModel;
 use \App\Models\PenjualanDetailModel;
 use \App\Models\MejaModel;
 
-class Dapur extends BaseController
+class Transaksi extends BaseController
 {
 
     //Membuat Variabel Untuk Menampung UsersModel
@@ -76,73 +76,9 @@ class Dapur extends BaseController
         }
 
         $data = [
-            'title' => 'RestoServe || Data Pesanan',
-            'penjualan' => $penjualan
+            'title' => 'RestoServe || Transaksi Pemesanan'
         ];
 
-        return view('dapur/datapesanan', $data);
-    }
-
-    public function datapesanan()
-    {
-        //Cek Session Login
-        if (session()->get('role_id') == 3) {
-            $db = \Config\Database::connect();
-            $builder = $db->table('penjualan');
-            $builder->select('penjualan.id,invoice,pelanggan,tanggal,nomor_meja,tipe_pesanan');
-            $builder->join('meja', 'penjualan.id_meja = meja.id');
-            $builder->where('tipe_pesanan', 1);
-            $builder->where('status_pesanan', 0);
-            $query = $builder->get();
-            $penjualan = $query->getResultArray();
-            echo json_encode($penjualan);
-        } else  if (session()->get('role_id') == 5) {
-            $db = \Config\Database::connect();
-            $builder = $db->table('penjualan');
-            $builder->select('penjualan.id,invoice,pelanggan,tanggal,nomor_meja,tipe_pesanan');
-            $builder->join('meja', 'penjualan.id_meja = meja.id');
-            $builder->where('tipe_pesanan', 2);
-            $builder->where('status_pesanan', 0);
-            $query = $builder->get();
-            $penjualan = $query->getResultArray();
-            echo json_encode($penjualan);
-        } else {
-            $db = \Config\Database::connect();
-            $builder = $db->table('penjualan');
-            $builder->select('penjualan.id,invoice,pelanggan,tanggal,nomor_meja,tipe_pesanan');
-            $builder->join('meja', 'penjualan.id_meja = meja.id');
-            $builder->where('status_pesanan', 0);
-            $query = $builder->get();
-            $penjualan = $query->getResultArray();
-            echo json_encode($penjualan);
-        }
-    }
-
-    public function prosesPesanan()
-    {
-        //Ambil ID Menu
-        $idMenu = $this->request->getPost('idMenu');
-
-        //Update Database Penjualan_Detail
-        if ($this->penjualanDetailModel->save([
-            'id' => $idMenu,
-            'status_menu' => 1
-        ])) {
-            echo 'berhasil';
-        }
-    }
-
-    public function prosesPesananReady()
-    {
-        //Ambil ID Menu
-        $idPenjualan = $this->request->getPost('idPenjualan');
-
-        //Update Database Penjualan_Detail
-        if ($this->penjualanModel->save([
-            'id' => $idPenjualan,
-            'status_pesanan' => 1
-        ])) {
-            echo 'berhasil';
-        }
+        return view('transaksi/transaksipemesanan', $data);
     }
 }

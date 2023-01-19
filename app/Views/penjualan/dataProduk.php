@@ -27,7 +27,7 @@
                         <?php $nomor = 1; ?>
                         <?php foreach ($produk as $p) : ?>
                             <tr>
-                                <td><button class="badge badge-grey"><?= $nomor++; ?></button></td>
+                                <td><button class="badge badge-black"><?= $nomor++; ?></button></td>
                                 <td><?= $p['kode_produk']; ?></td>
                                 <td><?= $p['nama_produk']; ?></td>
                                 <td><?= $p['kategori']; ?></td>

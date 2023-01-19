@@ -48,6 +48,14 @@ class Penjualan extends BaseController
 		if (!session()->has('logged_in')) {
 			session()->setFlashdata('login', 'Silahkan Login Terlebih Dahulu !');
 			return redirect()->to(base_url());
+		} else {
+			if (session()->get('role_id') == 3) {
+				return redirect()->to(base_url('koki'));
+			} else if (session()->get('role_id') == 5) {
+				return redirect()->to(base_url('koki'));
+			} else if (session()->get('role_id') == 4) {
+				return redirect()->to(base_url('kasir'));
+			}
 		}
 
 		$meja = $this->mejaModel->where('status_meja', 0)->findAll();
@@ -401,15 +409,20 @@ class Penjualan extends BaseController
 		if (!session()->has('logged_in')) {
 			session()->setFlashdata('login', 'Silahkan Login Terlebih Dahulu !');
 			return redirect()->to(base_url());
+		} else {
+			if (session()->get('role_id') == 3) {
+				return redirect()->to(base_url('koki'));
+			} else if (session()->get('role_id') == 5) {
+				return redirect()->to(base_url('koki'));
+			} else if (session()->get('role_id') == 4) {
+				return redirect()->to(base_url('kasir'));
+			}
 		}
-
-		helper('my_helper');
 
 		//Ambil Data Penjualan
 		$dataPenjualan = $this->penjualanModel->findAll();
-
 		$data = [
-			'title' => 'PosCafe || Data Penjualan',
+			'title' => 'RestoServe || Data Penjualan',
 			'dataPenjualan' => $dataPenjualan
 		];
 
