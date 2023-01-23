@@ -159,7 +159,7 @@
                     <div class="form-row">
                         <div class="form-group col-md-6">
                             <label>Pilih Tanggal Awal</label>
-                            <input type="date" id="tanggal_cetak" name="tanggal_cetak" class="form-control">
+                            <input type="date" id="tanggal_awal" name="tanggal_awal" class="form-control">
                         </div>
                         <div class="form-group col-md-6">
                             <label>Pilih Tanggal Akhir</label>

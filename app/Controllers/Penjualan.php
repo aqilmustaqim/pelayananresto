@@ -428,96 +428,98 @@ class Penjualan extends BaseController
 
 		return view('penjualan/dataPenjualan', $data);
 	}
-	// public function laporanPenjualan()
-	// {
+	public function laporanPenjualan()
+	{
 
-	// 	//Ambil Data Tanggal Cetak
-	// 	$tanggalAwal = $this->request->getPost('tanggal_cetak');
-	// 	$tanggalAkhir = $this->request->getPost('tanggal_akhir');
+		//Ambil Data Tanggal Cetak
+		$tanggalAwal = $this->request->getVar('tanggal_awal');
+		$tanggalAkhir = $this->request->getVar('tanggal_akhir');
 
-	// 	$db      = \Config\Database::connect();
-	// 	$builder = $db->table('penjualan');
-	// 	$builder->where('tanggal >=', $tanggalAwal);
-	// 	$builder->where('tanggal <=', $tanggalAkhir);
-	// 	$query = $builder->get();
-	// 	$laporanPenjualan = $query->getResultArray();
+		$db      = \Config\Database::connect();
+		$builder = $db->table('penjualan');
+		$builder->where('tanggal >=', $tanggalAwal);
+		$builder->where('tanggal <=', $tanggalAkhir);
+		$builder->where('status_pembayaran', 0);
+		$query = $builder->get();
+		$laporanPenjualan = $query->getResultArray();
 
-	// 	//Menghitung Total Penjualan Pada Tanggal Tersebut
-	// 	$db      = \Config\Database::connect();
-	// 	$builder = $db->table('penjualan');
-	// 	$builder->select('SUM(total) as totalpenjualan');
-	// 	$builder->where('tanggal >=', $tanggalAwal);
-	// 	$builder->where('tanggal <=', $tanggalAkhir);
-	// 	$query = $builder->get();
-	// 	$hasil = $query->getRowArray();
-	// 	$totalPenjualan = $hasil['totalpenjualan'];
+		//Menghitung Total Penjualan Pada Tanggal Tersebut
+		$db      = \Config\Database::connect();
+		$builder = $db->table('penjualan');
+		$builder->select('SUM(total) as totalpenjualan');
+		$builder->where('tanggal >=', $tanggalAwal);
+		$builder->where('tanggal <=', $tanggalAkhir);
+		$builder->where('status_pembayaran', 0);
+		$query = $builder->get();
+		$hasil = $query->getRowArray();
+		$totalPenjualan = $hasil['totalpenjualan'];
 
 
-	// 	if ($laporanPenjualan) {
+		if ($laporanPenjualan) {
 
-	// 		//Jika ada datanya maka cetak pdf nya
-	// 		$data = [
-	// 			'laporan' => $laporanPenjualan,
-	// 			'tanggalawal' => $tanggalAwal,
-	// 			'tanggalakhir' => $tanggalAkhir,
-	// 			'total_penjualan' => $totalPenjualan
-	// 		];
-	// 		$html = view('penjualan/laporanPenjualan', $data);
+			//Jika ada datanya maka cetak pdf nya
+			$data = [
+				'laporan' => $laporanPenjualan,
+				'tanggalawal' => $tanggalAwal,
+				'tanggalakhir' => $tanggalAkhir,
+				'total_penjualan' => $totalPenjualan
+			];
+			$html = view('penjualan/laporanPenjualan', $data);
 
-	// 		//$pdf = new TCPDF('P', 'mm', array('58', '30'), true, 'UTF-8', false);
-	// 		//$pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
+			//$pdf = new TCPDF('P', 'mm', array('58', '30'), true, 'UTF-8', false);
+			//$pdf = new TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
 
-	// 		//$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-	// 		//Informasi Dokumen
-	// 		// $pdf->SetCreator(PDF_CREATOR);
-	// 		// $pdf->SetAuthor('Aqil Mustaqim');
-	// 		// $pdf->SetTitle('Laporan Penjualan');
-	// 		// $pdf->SetSubject('Laporan Penjualan');
+			$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+			//Informasi Dokumen
+			$pdf->SetCreator(PDF_CREATOR);
+			$pdf->SetAuthor('Aqil Mustaqim');
+			$pdf->SetTitle('Laporan Penjualan');
+			$pdf->SetSubject('Laporan Penjualan');
 
-	// 		//Header Dan Footer Data
-	// 		//$pdf->setHeaderData('/assets/images/1.jpg', 1, 'PosCafe', 'JL. Gaperta No 433', array(48, 89, 112), array(48, 89, 112));
-	// 		//$pdf->setFooterData(array(0, 0, 0), array(0, 0, 0));
-	// 		//$pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-	// 		//$pdf->setFooterFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
-	// 		// $pdf->setPrintHeader(false);
-	// 		// $pdf->setPrintFooter(false);
+			//Header Dan Footer Data
+			//$pdf->setHeaderData('/assets/images/1.jpg', 1, 'PosCafe', 'JL. Gaperta No 433', array(48, 89, 112), array(48, 89, 112));
+			//$pdf->setFooterData(array(0, 0, 0), array(0, 0, 0));
+			//$pdf->setHeaderFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+			//$pdf->setFooterFont(array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+			$pdf->setPrintHeader(false);
+			$pdf->setPrintFooter(false);
 
-	// 		//$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+			//$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
 
-	// 		//Set Margin
-	// 		//$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-	// 		//$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-	// 		//$pdf->setFooterMargin(PDF_MARGIN_FOOTER);
+			//Set Margin
+			//$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
+			//$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+			//$pdf->setFooterMargin(PDF_MARGIN_FOOTER);
 
-	// 		//Baris Baru
-	// 		//$pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
+			//Baris Baru
+			//$pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
 
-	// 		//Set Scaling Image
-	// 		//$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+			//Set Scaling Image
+			//$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
-	// 		//Font Subsetting
-	// 		//$pdf->setFontSubsetting(true);
+			//Font Subsetting
+			//$pdf->setFontSubsetting(true);
 
-	// 		//Font Utama
-	// 		//$pdf->SetFont('helvetica', '', 12, '', true);
+			//Font Utama
+			//$pdf->SetFont('helvetica', '', 12, '', true);
 
-	// 		//$pdf->addPage();
+			$pdf->addPage();
 
-	// 		// output the HTML content
-	// 		//$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
+			// output the HTML content
+			//$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
 
-	// 		//$pdf->writeHTML($html, true, false, true, false, '');
-	// 		//$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
-	// 		//$pdf->writeHTML($html, true, false, true, false, '');
-	// 		//line ini penting
-	// 		$this->response->setContentType('application/pdf');
-	// 		//Close and output PDF document
-	// 		//$pdf->Output('laporan-penjualan.pdf', 'D');
-	// 	} else {
-	// 		//Jika data nya gak ada kirimkan pesan kosong
-	// 		echo "kosong";
-	// 	}
-	// }
+			$pdf->writeHTML($html, true, false, true, false, '');
+			//$pdf->writeHTMLCell(0, 0, '', '', $html, 0, 1, 0, true, '', true);
+			//$pdf->writeHTML($html, true, false, true, false, '');
+			//line ini penting
+			$this->response->setContentType('application/pdf');
+			//Close and output PDF document
+			$pdf->Output('laporan-penjualan.pdf', 'D');
+		} else {
+			//Jika data nya gak ada kirimkan pesan kosong
+			echo "kosong";
+		}
+	}
 
 	// public function laporanPengeluaran()
 	// {

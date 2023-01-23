@@ -50,35 +50,46 @@ class Transaksi extends BaseController
         }
 
         //Cek Session Login
-        if (session()->get('role_id') == 3) {
-            $db = \Config\Database::connect();
-            $builder = $db->table('penjualan');
-            $builder->select('penjualan.id,invoice,pelanggan,tanggal,nomor_meja,tipe_pesanan');
-            $builder->join('meja', 'penjualan.id_meja = meja.id');
-            $builder->where('tipe_pesanan', 1);
-            $query = $builder->get();
-            $penjualan = $query->getResultArray();
-        } else  if (session()->get('role_id') == 5) {
-            $db = \Config\Database::connect();
-            $builder = $db->table('penjualan');
-            $builder->select('penjualan.id,invoice,pelanggan,tanggal,nomor_meja,tipe_pesanan');
-            $builder->join('meja', 'penjualan.id_meja = meja.id');
-            $builder->where('tipe_pesanan', 2);
-            $query = $builder->get();
-            $penjualan = $query->getResultArray();
-        } else {
-            $db = \Config\Database::connect();
-            $builder = $db->table('penjualan');
-            $builder->select('penjualan.id,invoice,pelanggan,tanggal,nomor_meja,tipe_pesanan');
-            $builder->join('meja', 'penjualan.id_meja = meja.id');
-            $query = $builder->get();
-            $penjualan = $query->getResultArray();
-        }
 
+        $db = \Config\Database::connect();
+        $builder = $db->table('penjualan');
+        $builder->select('penjualan.id,invoice,pelanggan,tanggal,nomor_meja,tipe_pesanan,status_pesanan');
+        $builder->join('meja', 'penjualan.id_meja = meja.id');
+        $builder->where('status_pembayaran', 0);
+        $query = $builder->get();
+        $penjualan = $query->getResultArray();
         $data = [
-            'title' => 'RestoServe || Transaksi Pemesanan'
+            'title' => 'RestoServe || Transaksi Pemesanan',
+            'penjualan' => $penjualan
         ];
 
-        return view('transaksi/transaksipemesanan', $data);
+        return view('transaksi/statuspemesanan', $data);
+    }
+
+    public function statusPemesanan()
+    {
+
+        $db = \Config\Database::connect();
+        $builder = $db->table('penjualan');
+        $builder->select('penjualan.id,invoice,pelanggan,tanggal,nomor_meja,tipe_pesanan,status_pesanan');
+        $builder->join('meja', 'penjualan.id_meja = meja.id');
+        $builder->where('status_pembayaran', 0);
+        $query = $builder->get();
+        $penjualan = $query->getResultArray();
+        echo json_encode($penjualan);
+    }
+
+    public function detailPemesanan($invoice)
+    {
+
+        $db      = \Config\Database::connect();
+        $builder = $db->table('penjualan_detail');
+        $builder->select('nama_produk,jumlah,penjualan_detail.id,status_menu');
+        $builder->join('produk', 'penjualan_detail.id_produk = produk.id');
+        $builder->join('penjualan', 'penjualan_detail.invoice = penjualan.invoice');
+        $builder->where('penjualan_detail.invoice', $invoice);
+        $query = $builder->get();
+        $detailPesanan = $query->getResultArray();
+        echo json_encode($detailPesanan);
     }
 }

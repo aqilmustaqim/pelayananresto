@@ -112,9 +112,9 @@
                             <td><?= $dp['jumlah']; ?></td>
                             <td>
                                 <?php if ($dp['status_menu'] == 0) { ?>
-                                    <button class="badge badge-primary prosesMenuPesanan" data-id="<?= $dp['id']; ?>">Proses</button>
+                                    <button class="btn btn-sm light btn-primary prosesMenuPesanan" data-id="<?= $dp['id']; ?>">Proses</button>
                                 <?php } else { ?>
-                                    <button class="badge badge-success">Selesai</button>
+                                    <button class="btn btn-sm light btn-success">Selesai</button>
                                 <?php } ?>
                             </td>
                         </tbody>
