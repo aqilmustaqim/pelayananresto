@@ -22,6 +22,9 @@
     <!-- Sweet Alert 2 -->
     <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@10.10.1/dist/sweetalert2.min.css'>
 
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+
 </head>
 
 <body>
@@ -29,7 +32,7 @@
     <!--**********************************
         Main wrapper start
     ***********************************-->
-    <div id="main-wrapper">
+    <div id="main-wrapper" class="show">
 
         <!--**********************************
             Nav header start

@@ -31,7 +31,7 @@
             <?php if (session()->get('role_id') == 1) : ?>
                 <li>
                     <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-                        <i class="flaticon-381-layer-1"></i>
+                        <i class="fa fa-users"></i>
                         <span class="nav-text">Users</span>
                     </a>
                     <ul aria-expanded="false">
@@ -41,7 +41,7 @@
             <?php endif; ?>
             <li>
                 <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-                    <i class="flaticon-381-controls-3"></i>
+                    <i class="fa fa-database"></i>
                     <span class="nav-text">Dapur</span>
                 </a>
                 <ul aria-expanded="false">
@@ -50,11 +50,20 @@
             </li>
             <li>
                 <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
-                    <i class="flaticon-381-television"></i>
+                    <i class="fa fa-clipboard"></i>
                     <span class="nav-text">Transaksi</span>
                 </a>
                 <ul aria-expanded="false">
                     <li><a href="<?= base_url(); ?>/transaksi">Status Pemesanan</a></li>
+                </ul>
+            </li>
+            <li>
+                <a class="has-arrow ai-icon" href="javascript:void()" aria-expanded="false">
+                    <i class="flaticon-381-television"></i>
+                    <span class="nav-text">Kasir</span>
+                </a>
+                <ul aria-expanded="false">
+                    <li><a href="<?= base_url(); ?>/kasir/pembayaran">Pembayaran</a></li>
                 </ul>
             </li>
 
