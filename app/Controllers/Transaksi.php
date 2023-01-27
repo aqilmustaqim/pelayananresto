@@ -41,12 +41,6 @@ class Transaksi extends BaseController
         if (!session()->has('logged_in')) {
             session()->setFlashdata('login', 'Silahkan Login Terlebih Dahulu !');
             return redirect()->to(base_url());
-        } else {
-            if (session()->get('role_id') == 2) {
-                return redirect()->to(base_url('pelayan'));
-            } else if (session()->get('role_id') == 4) {
-                return redirect()->to(base_url('kasir'));
-            }
         }
 
         //Cek Session Login

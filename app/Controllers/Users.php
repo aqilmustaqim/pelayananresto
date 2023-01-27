@@ -34,6 +34,8 @@ class Users extends BaseController
 					return redirect()->to(base_url('koki'));
 				} else if (session()->get('role_id') == 4) {
 					return redirect()->to(base_url('kasir'));
+				} else if (session()->get('role_id') == 5) {
+					return redirect()->to(base_url('koki'));
 				}
 			}
 		}

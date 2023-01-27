@@ -88,8 +88,8 @@ class Auth extends BaseController
                     if ($user['role_id'] == 1) {
                         return redirect()->to(base_url('admin'));
                     } else if ($user['role_id'] == 2) {
-                        return redirect()->to(base_url('waiters'));
-                    } else if ($user['role_id'] == 3 and $user['role_id'] == 5) {
+                        return redirect()->to(base_url('pelayan'));
+                    } else if ($user['role_id'] == 3 or $user['role_id'] == 5) {
                         return redirect()->to(base_url('koki'));
                     } else if ($user['role_id'] == 4) {
                         return redirect()->to(base_url('kasir'));

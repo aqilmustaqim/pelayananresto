@@ -27,6 +27,15 @@ class Kasir extends BaseController
         $this->mejaModel = new MejaModel();
     }
 
+    public function index()
+    {
+        $data = [
+            'title' => 'RestoServe || Dashboard Kasir',
+            'validation' => \Config\Services::validation()
+        ];
+        return view('kasir/index', $data);
+    }
+
     public function pembayaran()
     {
         //cek status login
@@ -45,7 +54,7 @@ class Kasir extends BaseController
 
         $db = \Config\Database::connect();
         $builder = $db->table('penjualan');
-        $builder->select('penjualan.id,invoice,pelanggan,tanggal,nomor_meja,tipe_pesanan');
+        $builder->select('penjualan.id,invoice,pelanggan,tanggal,nomor_meja,tipe_pesanan,total');
         $builder->join('meja', 'penjualan.id_meja = meja.id');
         $builder->where('status_pesanan', 1);
         $builder->where('status_pembayaran', 0);
@@ -64,7 +73,7 @@ class Kasir extends BaseController
     {
         $db = \Config\Database::connect();
         $builder = $db->table('penjualan');
-        $builder->select('penjualan.id,invoice,pelanggan,tanggal,nomor_meja,tipe_pesanan');
+        $builder->select('penjualan.id,invoice,pelanggan,tanggal,nomor_meja,tipe_pesanan,total');
         $builder->join('meja', 'penjualan.id_meja = meja.id');
         $builder->where('status_pesanan', 1);
         $builder->where('status_pembayaran', 0);
