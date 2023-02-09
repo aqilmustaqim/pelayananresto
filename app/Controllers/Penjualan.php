@@ -186,44 +186,6 @@ class Penjualan extends BaseController
 		}
 	}
 
-	public function tampilTotalBayar()
-	{
-
-		if ($this->request->isAJAX()) {
-			//Kalau ada request dari ajax
-			//Tangkap Data Yang Dikirim Ajax
-			$invoice = $this->request->getPost('invoice');
-
-			//Jalankan Query SUM untuk jumlah total detailpesanan
-			$db      = \Config\Database::connect();
-			$builder = $db->table('temp_penjualan');
-			$builder->select('SUM(subtotal) as totalbayar');
-			$builder->where('invoice', $invoice);
-			$query = $builder->get();
-			$hasil = $query->getRowArray();
-
-			$msg = [
-				'totalbayar' => number_format($hasil['totalbayar'], 0, ",", ".")
-			];
-			echo json_encode($msg);
-		}
-	}
-
-	public function hapusItem()
-	{
-
-		if ($this->request->isAJAX()) {
-			//Kalau Ada Request Ajax
-			//Tangkap Data Dikirim Ajax
-			$id = $this->request->getPost('id');
-
-			//Hapus Data Produk Berdasarkan ID 
-			if ($this->tempPenjualanModel->delete($id)) {
-				echo "sukses";
-			}
-		}
-	}
-
 	public function simpanPenjualan()
 	{
 		//Ambil Data Ajax
@@ -232,7 +194,6 @@ class Penjualan extends BaseController
 		$pelanggan = $this->request->getPost('pelanggan');
 		$meja = $this->request->getPost('meja');
 		$tipepesanan = $this->request->getPost('tipepesanan');
-
 		$infomeja = $this->mejaModel->where('id', $meja)->first();
 
 		//Jalankan Query SUM untuk jumlah total detailpesanan
@@ -306,71 +267,77 @@ class Penjualan extends BaseController
 		echo '1';
 	}
 
-	// public function simpanPembayaran()
-	// {
+	public function tampilTotalBayar()
+	{
 
-	// 	//Tangkap Data nya
-	// 	$invoice = $this->request->getPost('invoice');
-	// 	$pelanggan = $this->request->getPost('pelanggan');
-	// 	$kasir = $this->request->getPost('kasir');
-	// 	$total =  str_replace(",", "", $this->request->getPost('total_pembayaran'));
-	// 	$jumlahUang =  str_replace(",", "", $this->request->getPost('jumlah_uang'));
-	// 	$sisaUang =  str_replace(",", "", $this->request->getPost('sisa_uang'));
+		if ($this->request->isAJAX()) {
+			//Kalau ada request dari ajax
+			//Tangkap Data Yang Dikirim Ajax
+			$invoice = $this->request->getPost('invoice');
+
+			//Jalankan Query SUM untuk jumlah total detailpesanan
+			$db      = \Config\Database::connect();
+			$builder = $db->table('temp_penjualan');
+			$builder->select('SUM(subtotal) as totalbayar');
+			$builder->where('invoice', $invoice);
+			$query = $builder->get();
+			$hasil = $query->getRowArray();
+
+			$msg = [
+				'totalbayar' => number_format($hasil['totalbayar'], 0, ",", ".")
+			];
+			echo json_encode($msg);
+		}
+	}
+
+	public function hapusItem()
+	{
+
+		if ($this->request->isAJAX()) {
+			//Kalau Ada Request Ajax
+			//Tangkap Data Dikirim Ajax
+			$id = $this->request->getPost('id');
+
+			//Hapus Data Produk Berdasarkan ID 
+			if ($this->tempPenjualanModel->delete($id)) {
+				echo "sukses";
+			}
+		}
+	}
+
+	public function simpanPembayaran()
+	{
+
+		//Tangkap Data nya
+		$id = $this->request->getPost('id');
+		$invoice = $this->request->getPost('invoice');
+		$pelanggan = $this->request->getPost('pelanggan');
+		$kasir = $this->request->getPost('kasir');
+		$total =  str_replace(",", "", $this->request->getPost('total_pembayaran'));
+		$jumlahUang =  str_replace(",", "", $this->request->getPost('jumlah_uang'));
+		$sisaUang =  str_replace(",", "", $this->request->getPost('sisa_uang'));
 
 
 
-	// 	//Masukkan Ke Database Penjualan
-	// 	if ($this->penjualanModel->save([
-	// 		'invoice' => $invoice,
-	// 		'tanggal' => date('Y-m-d H:i:s'),
-	// 		'pelanggan' => $pelanggan,
-	// 		'kasir' => $kasir,
-	// 		'jumlah_uang' => $jumlahUang,
-	// 		'sisa_uang' => $sisaUang,
-	// 		'total' => $total
-	// 	])) {
-	// 		// 	//Kalau Berhasil
-	// 		// 	//Masukkan Ke Database Penjualan Detail Dari Tabel Temp
-	// 		$db      = \Config\Database::connect();
-	// 		$builder = $db->table('temp_penjualan');
-	// 		$builder->where('invoice', $invoice);
-	// 		$query = $builder->get();
-	// 		$isiTempPenjualan = $query->getResultArray();
+		//Masukkan Ke Database Penjualan
+		if ($this->penjualanModel->save([
+			'id' => $id,
+			'status_pembayaran' => 1
+		])) {
+			//Masukkan Data Penjualan Ke Session Untuk Di Cetak Ke Struk
+			$dataPenjualan = [
+				'invoice' => $invoice,
+				'pelanggan' => $pelanggan,
+				'kasir' => $kasir,
+				'total' => $total,
+				'jumlah_uang' => $jumlahUang,
+				'sisa_uang' => $sisaUang
+			];
+			session()->set($dataPenjualan);
 
-	// 		$DetailPenjualan = [];
-	// 		foreach ($isiTempPenjualan as $row) {
-	// 			$DetailPenjualan[] = [
-	// 				'invoice' => $row['invoice'],
-	// 				'kode_produk' => $row['kode_produk'],
-	// 				'harga_beli' => $row['harga_beli'],
-	// 				'harga_jual' => $row['harga_jual'],
-	// 				'jumlah' => $row['jumlah'],
-	// 				'subtotal' => $row['subtotal'],
-	// 			];
-	// 		}
-	// 		$db      = \Config\Database::connect();
-	// 		$builder = $db->table('penjualan_detail');
-	// 		$builder->insertBatch($DetailPenjualan);
-
-	// 		//Hapus Temp
-	// 		$db      = \Config\Database::connect();
-	// 		$builder = $db->table('temp_penjualan');
-	// 		$builder->emptyTable();
-
-	// 		//Masukkan Data Penjualan Ke Session Untuk Di Cetak Ke Struk
-	// 		$dataPenjualan = [
-	// 			'invoice' => $invoice,
-	// 			'pelanggan' => $pelanggan,
-	// 			'kasir' => $kasir,
-	// 			'total' => $total,
-	// 			'jumlah_uang' => $jumlahUang,
-	// 			'sisa_uang' => $sisaUang
-	// 		];
-	// 		session()->set($dataPenjualan);
-
-	// 		echo 'berhasil';
-	// 	}
-	// }
+			echo 'berhasil';
+		}
+	}
 
 	// public function hapusPenjualan($id)
 	// {
@@ -441,7 +408,7 @@ class Penjualan extends BaseController
 		$builder = $db->table('penjualan');
 		$builder->where('tanggal >=', $tanggalAwal);
 		$builder->where('tanggal <=', $tanggalAkhir);
-		$builder->where('status_pembayaran', 0);
+		$builder->where('status_pembayaran', 1);
 		$query = $builder->get();
 		$laporanPenjualan = $query->getResultArray();
 
@@ -451,7 +418,7 @@ class Penjualan extends BaseController
 		$builder->select('SUM(total) as totalpenjualan');
 		$builder->where('tanggal >=', $tanggalAwal);
 		$builder->where('tanggal <=', $tanggalAkhir);
-		$builder->where('status_pembayaran', 0);
+		$builder->where('status_pembayaran', 1);
 		$query = $builder->get();
 		$hasil = $query->getRowArray();
 		$totalPenjualan = $hasil['totalpenjualan'];
@@ -583,7 +550,13 @@ class Penjualan extends BaseController
 
 	public function struk()
 	{
-
+		//Ambil Data Dari Ajaxx
+		$invoice = $this->request->getPost('invoice');
+		//$pelanggan = $this->request->getPost('pelanggan');
+		$kasir = $this->request->getPost('kasir');
+		$total =  str_replace(",", "", $this->request->getPost('totalPembayaran'));
+		$jumlahUang =  str_replace(",", "", $this->request->getPost('jumlahUang'));
+		$sisaUang =  str_replace(",", "", $this->request->getPost('sisaUang'));
 
 		//$logo = EscposImage::load("example/resources/escpos-php.png", false);
 		$profile = CapabilityProfile::load("simple");
@@ -595,7 +568,7 @@ class Penjualan extends BaseController
 		function buatBaris4Kolom($kolom1, $kolom2, $kolom3)
 		{
 			// Mengatur lebar setiap kolom (dalam satuan karakter)
-			$lebar_kolom_1 = 12;
+			$lebar_kolom_1 = 14;
 			$lebar_kolom_2 = 8;
 			$lebar_kolom_3 = 8;
 
@@ -634,6 +607,14 @@ class Penjualan extends BaseController
 			return implode("\n", $hasilBaris) . "\n";
 		}
 
+		//Query Mengambil Data 
+		$db      = \Config\Database::connect();
+		$builder = $db->table('penjualan_detail');
+		$builder->select('penjualan_detail.invoice,id_produk,nama_produk,harga_jual,jumlah,subtotal');
+		$builder->join('produk', 'penjualan_detail.id_produk = produk.id');
+		$builder->where('invoice', $invoice);
+		$query = $builder->get();
+		$hasil = $query->getResultArray();
 
 
 
@@ -660,8 +641,8 @@ class Penjualan extends BaseController
 
 		// Data transaksi
 		$printer->initialize();
-		$printer->text("Invoice : TRX123124123\n");
-		$printer->text("Kasir : Aqil Mustaqim\n");
+		$printer->text("Invoice : $invoice\n");
+		$printer->text("Kasir : $kasir\n");
 		$printer->text("Waktu : " . date('Y-m-d : H:i:s') . "\n");
 
 		// Membuat tabel
@@ -669,12 +650,14 @@ class Penjualan extends BaseController
 		$printer->text("--------------------------------\n");
 		$printer->text(buatBaris4Kolom("Produk", "Harga", "Subtotal"));
 		$printer->text("--------------------------------\n");
-
-		$printer->text(buatBaris4Kolom("2x Kopi", "15.000", "30.000"));
+		foreach ($hasil as $h) {
+			$printer->text(buatBaris4Kolom($h['jumlah'] . 'x ' . $h['nama_produk'], number_format($h['harga_jual'], 0), number_format($h['subtotal'], 0)));
+		}
+		//$printer->text(buatBaris4Kolom("2x Kopi", "15.000", "30.000"));
 		$printer->text("--------------------------------\n");
-		$printer->text(buatBaris4Kolom('', "Total", number_format(30000, 0)));
-		$printer->text(buatBaris4Kolom('', "Bayar", number_format(50000, 0)));
-		$printer->text(buatBaris4Kolom('', "Kembali", number_format(20000, 0)));
+		$printer->text(buatBaris4Kolom('', "Total", number_format($total, 0)));
+		$printer->text(buatBaris4Kolom('', "Bayar", number_format($jumlahUang, 0)));
+		$printer->text(buatBaris4Kolom('', "Kembali", number_format($sisaUang, 0)));
 		$printer->text("--------------------------------\n");
 		// Pesan penutup
 		$printer->initialize();
@@ -683,7 +666,7 @@ class Penjualan extends BaseController
 
 		$printer->feed(4); // mencetak 5 baris kosong agar terangkat (pemotong kertas saya memiliki jarak 5 baris dari toner)
 		$printer->close();
-		echo "Berhasil Di Cetak Struk";
+		echo "Berhasil Mencetak Struk";
 		/* mulai cetak */
 		// $printer->setJustification(Printer::JUSTIFY_CENTER);
 		// $printer->text("UD. KANAMART \n");

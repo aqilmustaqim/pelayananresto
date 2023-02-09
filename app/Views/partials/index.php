@@ -96,8 +96,7 @@
     <!-- Dashboard 1 -->
     <script src="<?= base_url(); ?>/assets/js/dashboard/dashboard-1.js"></script>
 
-    <!-- Js Sendiri -->
-    <script src="<?= base_url(); ?>/assets/js/myscript.js"></script>
+
 
     <!-- JQUERY -->
 
@@ -111,7 +110,11 @@
     <script src="<?= base_url(); ?>/assets/js/plugins-init/datatables.init.js"></script>
 
     <!-- AutoNumeric -->
-    <script src="<?= base_url('assets'); ?>/js/autoNumeric.js"></script>
+    <script src="<?= base_url(); ?>/assets/js/autoNumeric.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.1.0"></script> -->
+
+    <!-- Js Sendiri -->
+    <script src="<?= base_url(); ?>/assets/js/myscript.js"></script>
 
     <script>
         // Users

@@ -48,15 +48,20 @@
 <script>
     $(document).ready(function() {
         $('#main-wrapper').addClass('menu-toggle');
-        selesai();
+        update();
+        setInterval(function() {
+            update();
+
+        }, 5000);
+        //selesai();
     })
 
-    function selesai() {
-        setTimeout(function() {
-            update();
-            selesai();
-        }, 5000);
-    }
+    // function selesai() {
+    //     setTimeout(function() {
+    //         update();
+    //         selesai();
+    //     }, 500);
+    // }
 
     function update() {
         $.getJSON('<?= base_url('dapur/datapesanan'); ?>', function(data) {

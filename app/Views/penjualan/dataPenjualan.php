@@ -15,6 +15,7 @@
                         <h4 class="card-title">Data Penjualan</h4>
                         <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modalDataPenjualan">Cetak Data Penjualan</button>
                     </div>
+
                     <div class="card-body">
                         <div class="table-responsive">
                             <table id="example" class="display" style="min-width: 845px">
@@ -30,6 +31,7 @@
                                         <th>Pesanan</th>
                                         <th>Status</th>
                                         <th>Aksi</th>
+
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -86,6 +88,7 @@
                             </table>
                         </div>
                     </div>
+
                 </div>
             </div>
 

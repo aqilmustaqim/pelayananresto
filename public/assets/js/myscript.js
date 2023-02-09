@@ -1,5 +1,7 @@
 //Auto Numeric
 $(document).ready(function() {
+
+  
   $('#modal').autoNumeric('init', {
       aSep: ',',
       aDec: '.',
@@ -15,6 +17,7 @@ $('#nominal_kas').autoNumeric('init', {
   aDec: '.',
   mDec: '0'
 });
+
 });
 
 
