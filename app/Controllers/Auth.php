@@ -30,7 +30,7 @@ class Auth extends BaseController
             }
         }
         $data = [
-            'title' => 'RestoServe || Login',
+            'title' => 'MieAceh Titi Bobrok || Login',
             'validation' => \Config\Services::validation()
         ];
         return view('auth/login', $data);

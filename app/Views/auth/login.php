@@ -9,7 +9,8 @@
                         <div class="col-xl-12">
                             <div class="auth-form">
                                 <div class="text-center">
-                                    <h1 class="h2">Mie Aceh Titi Bobrok &#x1f44b;</h1>
+                                    <img src="<?= base_url(); ?>/assets/images/logo/mieaceh1.png" alt="" width="175px">
+                                    <h1 class="h2">Mie Aceh Titi Bobrok</h1>
                                     <h4 class="text-center mb-4">Sign in your account</h4>
                                 </div>
                                 <?php if (session()->getFlashdata('login')) { ?>
