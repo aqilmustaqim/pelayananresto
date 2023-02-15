@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 09, 2023 at 11:47 AM
+-- Generation Time: Feb 15, 2023 at 09:09 AM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 7.4.28
 
@@ -125,7 +125,7 @@ INSERT INTO `penjualan` (`id`, `id_meja`, `invoice`, `tanggal`, `pelanggan`, `to
 (10, 1, 'TRX17012300001', '2023-01-17', 'Mustaqim', 24000, 1, 1, 1, 'Aqil Mustaqim'),
 (11, 5, 'TRX17012300002', '2023-01-17', 'Aqil', 23000, 1, 1, 1, 'Aqil Mustaqim'),
 (12, 19, 'TRX17012300003', '2023-01-17', 'Nafi', 55000, 1, 1, 2, 'Aqil Mustaqim'),
-(13, 19, 'TRX17012300004', '2023-01-17', 'Umum', 35000, 0, 0, 2, 'Aqil Mustaqim'),
+(13, 19, 'TRX17012300004', '2023-01-17', 'Umum', 35000, 1, 0, 2, 'Aqil Mustaqim'),
 (14, 19, 'TRX18012300001', '2023-01-18', 'Pak Agus', 11000, 0, 0, 2, 'Aqil Mustaqim'),
 (15, 19, 'TRX18012300002', '2023-01-18', 'Acil', 33000, 0, 0, 2, 'Aqil Mustaqim'),
 (16, 19, 'TRX18012300003', '2023-01-18', 'Umum', 24000, 0, 0, 2, 'Aqil Mustaqim'),
@@ -161,7 +161,7 @@ INSERT INTO `penjualan_detail` (`id`, `invoice`, `id_produk`, `harga_beli`, `har
 (15, 'TRX17012300002', 3, 5000, 12000, 1, 12000, 1),
 (16, 'TRX17012300003', 4, 5000, 11000, 5, 55000, 1),
 (17, 'TRX17012300004', 3, 5000, 12000, 2, 24000, 1),
-(18, 'TRX17012300004', 4, 5000, 11000, 1, 11000, 0),
+(18, 'TRX17012300004', 4, 5000, 11000, 1, 11000, 1),
 (19, 'TRX18012300001', 4, 5000, 11000, 1, 11000, 0),
 (20, 'TRX18012300002', 4, 5000, 11000, 3, 33000, 0),
 (21, 'TRX18012300003', 3, 5000, 12000, 2, 24000, 1),
@@ -216,6 +216,14 @@ CREATE TABLE `temp_penjualan` (
   `subtotal` int(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `temp_penjualan`
+--
+
+INSERT INTO `temp_penjualan` (`id`, `invoice`, `id_produk`, `harga_beli`, `harga_jual`, `jumlah`, `subtotal`) VALUES
+(43, 'TRX09022300001', 3, 5000, 12000, 2, 24000),
+(44, 'TRX09022300001', 3, 5000, 12000, 1, 12000);
+
 -- --------------------------------------------------------
 
 --
@@ -239,7 +247,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `nama`, `email`, `password`, `role_id`, `foto`, `is_active`, `created_at`, `updated_at`) VALUES
-(2, 'Aqil Mustaqim', 'aqilmustaqim28@gmail.com', '$2y$10$ud88vS3ueos50Ck3mvdvSuV0zh9fW9nLUoMVZQw1V6G5zVEl5pEH.', 1, 'default.png', 1, '2023-01-13 01:52:10', '2023-01-13 01:52:10'),
+(2, 'Aqil Mustaqim', 'aqilmustaqim28@gmail.com', '$2y$10$rWK9lONpGQkanhLhWC2FRernYkJ1h0bmtHSnZdPcsL/opdb4F.Vxm', 1, 'default.png', 1, '2023-01-13 01:52:10', '2023-02-15 11:57:47'),
 (3, 'Muhammad Nafi Udin', 'sayanafi@gmail.com', '$2y$10$R4HLevPmz54kC.EPBHcdae5GPSoxXWwANg/Ed9qmyw/rfU7QYyT.i', 2, 'default.png', 1, '2023-01-13 08:40:01', '2023-01-13 09:19:15'),
 (8, 'Yudha Anoraga', 'yudhaanoraga@gmail.com', '$2y$10$FfxvNNeO6LGkzk8RExv8VOByHZ8wliZLdmtw.cGB9TZLQwBlPdVGm', 3, 'default.png', 1, '2023-01-13 12:30:01', '2023-01-13 12:30:01'),
 (9, 'Diana Puspita', 'diana@gmail.com', '$2y$10$gLOr7jqacu/Ouw4Gjk9Kp.NGSVifFcr/CjO7POXS78KgmqK7RoFFC', 4, 'default.png', 1, '2023-01-13 12:38:37', '2023-01-13 12:38:37'),
@@ -370,7 +378,7 @@ ALTER TABLE `produk`
 -- AUTO_INCREMENT for table `temp_penjualan`
 --
 ALTER TABLE `temp_penjualan`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `users`
