@@ -110,10 +110,10 @@ class Users extends BaseController
 			session()->setFlashdata('login', 'Silahkan Login Terlebih Dahulu !');
 			return redirect()->to(base_url());
 		}
-		$user = $this->usersModel->where(['username' => session()->get('username')])->first();
+		$user = $this->usersModel->where(['email' => session()->get('email')])->first();
 
 		$data = [
-			'title' => 'PosCafe || Profile',
+			'title' => 'RestoServe || Profile',
 			'users' => $user,
 			'validation' => \Config\Services::validation()
 		];
@@ -126,17 +126,11 @@ class Users extends BaseController
 		//Tangkap Data Ajax
 		$id = $this->request->getVar('id');
 		$nama = $this->request->getVar('nama');
-		$username = $this->request->getVar('username');
-		$email = $this->request->getVar('email');
-		$hint = $this->request->getVar('hint');
 
 		//Update Database
 		if ($this->usersModel->save([
 			'id' => $id,
-			'nama' => $nama,
-			'username' => $username,
-			'email' => $email,
-			'hint' => $hint
+			'nama' => $nama
 		])) {
 			echo "1";
 		} else {
