@@ -18,6 +18,15 @@ class Admin extends BaseController
 
     public function index()
     {
+
+        if (!session()->get('logged_in')) {
+            return redirect()->to(base_url());
+        } else {
+            if (session()->get('role_id') != 1) {
+                return redirect()->to(base_url());
+            }
+        }
+
         //Menghitung Jumlah User
         $db      = \Config\Database::connect();
         $builder = $db->table('users');

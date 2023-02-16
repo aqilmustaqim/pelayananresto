@@ -27,6 +27,8 @@ class Auth extends BaseController
                 return redirect()->to(base_url('koki'));
             } else if (session()->get('role_id') == 4) {
                 return redirect()->to(base_url('kasir'));
+            } else if (session()->get('role_id') == 5) {
+                return redirect()->to(base_url('koki'));
             }
         }
         $data = [
@@ -88,11 +90,11 @@ class Auth extends BaseController
                     if ($user['role_id'] == 1) {
                         return redirect()->to(base_url('admin'));
                     } else if ($user['role_id'] == 2) {
-                        return redirect()->to(base_url('pelayan'));
+                        return redirect()->to(base_url('penjualan/inputPenjualan'));
                     } else if ($user['role_id'] == 3 or $user['role_id'] == 5) {
-                        return redirect()->to(base_url('koki'));
+                        return redirect()->to(base_url('dapur'));
                     } else if ($user['role_id'] == 4) {
-                        return redirect()->to(base_url('kasir'));
+                        return redirect()->to(base_url('kasir/pembayaran'));
                     }
                 } else {
                     //litertly wicis if user tidak aktif

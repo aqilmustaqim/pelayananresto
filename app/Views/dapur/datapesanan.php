@@ -48,6 +48,7 @@
 <script>
     $(document).ready(function() {
         $('#main-wrapper').addClass('menu-toggle');
+
         update();
         setInterval(function() {
             update();
@@ -60,7 +61,7 @@
     //     setTimeout(function() {
     //         update();
     //         selesai();
-    //     }, 500);
+    //     }, 5000);
     // }
 
     function update() {

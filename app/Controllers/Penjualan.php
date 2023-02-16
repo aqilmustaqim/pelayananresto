@@ -310,6 +310,7 @@ class Penjualan extends BaseController
 
 		//Tangkap Data nya
 		$id = $this->request->getPost('id');
+		$idmeja = $this->request->getPost('idmeja');
 		$invoice = $this->request->getPost('invoice');
 		$pelanggan = $this->request->getPost('pelanggan');
 		$kasir = $this->request->getPost('kasir');
@@ -334,6 +335,12 @@ class Penjualan extends BaseController
 				'sisa_uang' => $sisaUang
 			];
 			session()->set($dataPenjualan);
+
+			//Ubah Data Meja
+			$this->mejaModel->save([
+				'id' => $idmeja,
+				'status_meja' => 0
+			]);
 
 			echo 'berhasil';
 		}
@@ -607,7 +614,7 @@ class Penjualan extends BaseController
 			return implode("\n", $hasilBaris) . "\n";
 		}
 
-		//Query Mengambil Data 
+		//Query Mengambil Data Detail
 		$db      = \Config\Database::connect();
 		$builder = $db->table('penjualan_detail');
 		$builder->select('penjualan_detail.invoice,id_produk,nama_produk,harga_jual,jumlah,subtotal');
@@ -616,6 +623,15 @@ class Penjualan extends BaseController
 		$query = $builder->get();
 		$hasil = $query->getResultArray();
 
+		//Query Mengambil Data Penjualan Invoice
+		$penjualan = $this->penjualanModel->where(['invoice' => $invoice])->first();
+		$tipepesanan = "";
+
+		if ($penjualan['tipe_pesanan'] == 1) {
+			$tipepesanan .= "Dine In";
+		} else {
+			$tipepesanan .= "Take Away";
+		}
 
 
 
@@ -642,6 +658,7 @@ class Penjualan extends BaseController
 		// Data transaksi
 		$printer->initialize();
 		$printer->text("Invoice : $invoice\n");
+		$printer->text("Pesanan : $tipepesanan\n");
 		$printer->text("Kasir : $kasir\n");
 		$printer->text("Waktu : " . date('Y-m-d : H:i:s') . "\n");
 

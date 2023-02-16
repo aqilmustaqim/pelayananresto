@@ -139,6 +139,7 @@
                         <div class="form-row">
 
                             <input type="hidden" name="id" id="" value="<?= $p['id']; ?>">
+                            <input type="hidden" name="idmeja" id="" value="<?= $p['id_meja']; ?>">
                             <input type="hidden" id="strukkasir" name="kasir" value="<?= session()->get('nama'); ?>">
                             <input type="hidden" id="strukinvoice" name="invoice" value="<?= $p['invoice']; ?>">
                             <input type="hidden" id="strukpelanggan" name="pelanggan" value="<?= $p['pelanggan']; ?>">
@@ -175,8 +176,6 @@
         </div>
     </div>
 
-
-
 <?php endforeach; ?>
 
 <script>
@@ -189,6 +188,8 @@
         //     prosesPembayaran();
         // });
 
+
+
         const Toast = Swal.mixin({
             toast: true,
             position: 'top-end',
@@ -200,8 +201,6 @@
                 toast.addEventListener('mouseleave', Swal.resumeTimer)
             }
         })
-
-
 
         $('.jumlah_uang').autoNumeric('init', {
             aSep: ',',
@@ -219,6 +218,7 @@
             mDec: '0'
         });
 
+
         //Ketika Jumlah Uang Di Ketik Maka Sisa Uang Akan Muncul
         $('.jumlah_uang').keyup(function() {
             //Ambil Inputan Jumlah Uangnya dan total pembayaran
@@ -227,10 +227,14 @@
             //Jumlah Uang - Total Pembayaran
             let sisaUang = parseFloat(jumlahUang) - parseFloat(totalPembayaran);
             //Hasil sisa Uang Masukkan Ke Value 
-            $('.sisa_uang').val(sisaUang);
+            if (jumlahUang == "") {
+                $('.sisa_uang').val("");
+            } else {
+                $('.sisa_uang').val(sisaUang);
 
-            let sisaUangx = $('.sisa_uang').val();
-            $('.sisa_uang').autoNumeric('set', sisaUangx);
+                let sisaUangx = $('.sisa_uang').val();
+                $('.sisa_uang').autoNumeric('set', sisaUangx);
+            }
         });
 
         $('.formPembayaran').submit(function(e) {
@@ -278,7 +282,7 @@
                                     //Jika Ingin Langsung Redirect Pakai Ajax 
                                     $.ajax({
                                         type: "post",
-                                        url: "/penjualan/struk",
+                                        url: "<?= base_url(); ?>/penjualan/struk",
                                         data: {
                                             invoice: $('#strukinvoice').val(),
                                             kasir: $('#strukkasir').val(),

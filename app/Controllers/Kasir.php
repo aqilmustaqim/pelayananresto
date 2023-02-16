@@ -54,7 +54,7 @@ class Kasir extends BaseController
 
         $db = \Config\Database::connect();
         $builder = $db->table('penjualan');
-        $builder->select('penjualan.id,invoice,pelanggan,tanggal,nomor_meja,tipe_pesanan,total');
+        $builder->select('penjualan.id,invoice,pelanggan,tanggal,nomor_meja,tipe_pesanan,total,id_meja');
         $builder->join('meja', 'penjualan.id_meja = meja.id');
         $builder->where('status_pesanan', 1);
         $builder->where('status_pembayaran', 0);
