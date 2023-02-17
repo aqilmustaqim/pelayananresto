@@ -201,7 +201,11 @@
                 toast.addEventListener('mouseleave', Swal.resumeTimer)
             }
         })
-
+        $('.total_pembayaran').autoNumeric('init', {
+            aSep: ',',
+            aDec: '.',
+            mDec: '0'
+        });
         $('.jumlah_uang').autoNumeric('init', {
             aSep: ',',
             aDec: '.',
@@ -212,11 +216,7 @@
             aDec: '.',
             mDec: '0'
         });
-        $('.total_pembayaran').autoNumeric('init', {
-            aSep: ',',
-            aDec: '.',
-            mDec: '0'
-        });
+
 
 
         //Ketika Jumlah Uang Di Ketik Maka Sisa Uang Akan Muncul

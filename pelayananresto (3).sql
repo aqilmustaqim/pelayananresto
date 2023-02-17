@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 15, 2023 at 09:09 AM
+-- Generation Time: Feb 17, 2023 at 10:18 AM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 7.4.28
 
@@ -58,12 +58,12 @@ CREATE TABLE `meja` (
 --
 
 INSERT INTO `meja` (`id`, `nomor_meja`, `status_meja`) VALUES
-(1, 1, 1),
-(2, 2, 1),
-(3, 3, 1),
-(4, 4, 1),
-(5, 5, 1),
-(6, 6, 1),
+(1, 1, 0),
+(2, 2, 0),
+(3, 3, 0),
+(4, 4, 0),
+(5, 5, 0),
+(6, 6, 0),
 (10, 7, 0),
 (18, 8, 0),
 (19, 0, 0);
@@ -125,14 +125,24 @@ INSERT INTO `penjualan` (`id`, `id_meja`, `invoice`, `tanggal`, `pelanggan`, `to
 (10, 1, 'TRX17012300001', '2023-01-17', 'Mustaqim', 24000, 1, 1, 1, 'Aqil Mustaqim'),
 (11, 5, 'TRX17012300002', '2023-01-17', 'Aqil', 23000, 1, 1, 1, 'Aqil Mustaqim'),
 (12, 19, 'TRX17012300003', '2023-01-17', 'Nafi', 55000, 1, 1, 2, 'Aqil Mustaqim'),
-(13, 19, 'TRX17012300004', '2023-01-17', 'Umum', 35000, 1, 0, 2, 'Aqil Mustaqim'),
-(14, 19, 'TRX18012300001', '2023-01-18', 'Pak Agus', 11000, 0, 0, 2, 'Aqil Mustaqim'),
-(15, 19, 'TRX18012300002', '2023-01-18', 'Acil', 33000, 0, 0, 2, 'Aqil Mustaqim'),
-(16, 19, 'TRX18012300003', '2023-01-18', 'Umum', 24000, 0, 0, 2, 'Aqil Mustaqim'),
-(17, 2, 'TRX18012300004', '2023-01-18', 'Didit', 23000, 0, 0, 1, 'Aqil Mustaqim'),
+(13, 19, 'TRX17012300004', '2023-01-17', 'Umum', 35000, 1, 1, 2, 'Aqil Mustaqim'),
+(14, 19, 'TRX18012300001', '2023-01-18', 'Pak Agus', 11000, 1, 1, 2, 'Aqil Mustaqim'),
+(15, 19, 'TRX18012300002', '2023-01-18', 'Acil', 33000, 1, 1, 2, 'Aqil Mustaqim'),
+(16, 19, 'TRX18012300003', '2023-01-18', 'Umum', 24000, 1, 1, 2, 'Aqil Mustaqim'),
+(17, 2, 'TRX18012300004', '2023-01-18', 'Didit', 23000, 1, 1, 1, 'Aqil Mustaqim'),
 (18, 3, 'TRX01022300001', '2023-02-01', 'Fajar', 11000, 1, 1, 1, 'Aqil Mustaqim'),
 (19, 4, 'TRX01022300002', '2023-02-01', 'Manda', 45000, 1, 1, 1, 'Aqil Mustaqim'),
-(20, 6, 'TRX07022300001', '2023-02-07', 'Umum', 12000, 0, 0, 1, 'Muhammad Nafi Udin');
+(20, 6, 'TRX07022300001', '2023-02-07', 'Umum', 12000, 1, 1, 1, 'Muhammad Nafi Udin'),
+(21, 10, 'TRX16022300001', '2023-02-16', 'Pak Nafi', 18000, 1, 1, 1, 'Muhammad Nafi Udin'),
+(22, 18, 'TRX16022300002', '2023-02-16', 'Bapaknya Aqil', 13000, 1, 1, 1, 'Aqil Mustaqim'),
+(23, 2, 'TRX16022300003', '2023-02-16', 'Umum', 12000, 1, 1, 1, 'Aqil Mustaqim'),
+(24, 6, 'TRX16022300004', '2023-02-16', 'Umum', 13000, 1, 1, 1, 'Aqil Mustaqim'),
+(25, 19, 'TRX16022300005', '2023-02-16', 'Umum', 12000, 1, 1, 2, 'Aqil Mustaqim'),
+(26, 19, 'TRX16022300006', '2023-02-16', 'Umum', 44000, 1, 1, 2, 'Aqil Mustaqim'),
+(27, 19, 'TRX16022300007', '2023-02-16', 'Ririn', 22000, 1, 1, 2, 'Aqil Mustaqim'),
+(28, 19, 'TRX16022300008', '2023-02-16', 'Mak Beti', 36000, 1, 1, 2, 'Aqil Mustaqim'),
+(29, 1, 'TRX16022300009', '2023-02-16', 'Umum', 10000, 1, 1, 1, 'Muhammad Nafi Udin'),
+(30, 19, 'TRX16022300010', '2023-02-16', 'Tesla', 12000, 1, 1, 2, 'Muhammad Nafi Udin');
 
 -- --------------------------------------------------------
 
@@ -162,15 +172,26 @@ INSERT INTO `penjualan_detail` (`id`, `invoice`, `id_produk`, `harga_beli`, `har
 (16, 'TRX17012300003', 4, 5000, 11000, 5, 55000, 1),
 (17, 'TRX17012300004', 3, 5000, 12000, 2, 24000, 1),
 (18, 'TRX17012300004', 4, 5000, 11000, 1, 11000, 1),
-(19, 'TRX18012300001', 4, 5000, 11000, 1, 11000, 0),
-(20, 'TRX18012300002', 4, 5000, 11000, 3, 33000, 0),
+(19, 'TRX18012300001', 4, 5000, 11000, 1, 11000, 1),
+(20, 'TRX18012300002', 4, 5000, 11000, 3, 33000, 1),
 (21, 'TRX18012300003', 3, 5000, 12000, 2, 24000, 1),
-(22, 'TRX18012300004', 4, 5000, 11000, 1, 11000, 0),
-(23, 'TRX18012300004', 3, 5000, 12000, 1, 12000, 0),
+(22, 'TRX18012300004', 4, 5000, 11000, 1, 11000, 1),
+(23, 'TRX18012300004', 3, 5000, 12000, 1, 12000, 1),
 (24, 'TRX01022300001', 4, 5000, 11000, 1, 11000, 1),
 (25, 'TRX01022300002', 3, 5000, 12000, 1, 12000, 1),
 (26, 'TRX01022300002', 4, 5000, 11000, 3, 33000, 1),
-(27, 'TRX07022300001', 3, 5000, 12000, 1, 12000, 0);
+(27, 'TRX07022300001', 3, 5000, 12000, 1, 12000, 1),
+(28, 'TRX16022300001', 5, 1000, 5000, 1, 5000, 1),
+(29, 'TRX16022300001', 2, 6000, 13000, 1, 13000, 1),
+(30, 'TRX16022300002', 2, 6000, 13000, 1, 13000, 1),
+(31, 'TRX16022300003', 3, 5000, 12000, 1, 12000, 1),
+(32, 'TRX16022300004', 2, 6000, 13000, 1, 13000, 1),
+(33, 'TRX16022300005', 3, 5000, 12000, 1, 12000, 1),
+(34, 'TRX16022300006', 4, 5000, 11000, 4, 44000, 1),
+(35, 'TRX16022300007', 4, 5000, 11000, 2, 22000, 1),
+(36, 'TRX16022300008', 3, 5000, 12000, 3, 36000, 1),
+(37, 'TRX16022300009', 5, 1000, 5000, 2, 10000, 1),
+(38, 'TRX16022300010', 3, 5000, 12000, 1, 12000, 1);
 
 -- --------------------------------------------------------
 
@@ -195,10 +216,10 @@ CREATE TABLE `produk` (
 --
 
 INSERT INTO `produk` (`id`, `kode_produk`, `nama_produk`, `kategori_produk_id`, `stok_produk`, `modal_produk`, `harga_produk`, `foto_produk`, `keterangan_produk`) VALUES
-(2, 'PRDK002', 'Mie Aceh Goreng', 1, 0, 6000, 13000, '1673631246_b76bfe5f6eb814f3374d.jpeg', 'Mie Aceh Goreng Merupakan Mie Dengan Hasil Gorengan'),
+(2, 'PRDK002', 'Mie Aceh Goreng', 1, 1, 6000, 13000, '1673631246_b76bfe5f6eb814f3374d.jpeg', 'Mie Aceh Goreng Merupakan Mie Dengan Hasil Gorengan'),
 (3, 'PRDK003', 'Mie Aceh Kepiting', 1, 1, 5000, 12000, '1673631449_29087d3d918f9ed3a65c.jpg', 'Mie Aceh Kepiting Dengan Varian Kuah Enak'),
 (4, 'PRDK004', 'Mie Aceh Kuah Biasa', 1, 1, 5000, 11000, '1673631708_5c19fd3ae4be6f33182d.jpg', 'Mie Aceh Kuah Enak'),
-(5, 'PRDK005', 'Teh Manis Dingin', 2, 0, 1000, 5000, '1675004463_e94184a3176dd8b87550.png', 'Teh Manis Enak');
+(5, 'PRDK005', 'Teh Manis Dingin', 2, 1, 1000, 5000, '1675004463_e94184a3176dd8b87550.png', 'Teh Manis Enak');
 
 -- --------------------------------------------------------
 
@@ -215,14 +236,6 @@ CREATE TABLE `temp_penjualan` (
   `jumlah` int(50) NOT NULL,
   `subtotal` int(128) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `temp_penjualan`
---
-
-INSERT INTO `temp_penjualan` (`id`, `invoice`, `id_produk`, `harga_beli`, `harga_jual`, `jumlah`, `subtotal`) VALUES
-(43, 'TRX09022300001', 3, 5000, 12000, 2, 24000),
-(44, 'TRX09022300001', 3, 5000, 12000, 1, 12000);
 
 -- --------------------------------------------------------
 
@@ -247,11 +260,11 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `nama`, `email`, `password`, `role_id`, `foto`, `is_active`, `created_at`, `updated_at`) VALUES
-(2, 'Aqil Mustaqim', 'aqilmustaqim28@gmail.com', '$2y$10$rWK9lONpGQkanhLhWC2FRernYkJ1h0bmtHSnZdPcsL/opdb4F.Vxm', 1, 'default.png', 1, '2023-01-13 01:52:10', '2023-02-15 11:57:47'),
-(3, 'Muhammad Nafi Udin', 'sayanafi@gmail.com', '$2y$10$R4HLevPmz54kC.EPBHcdae5GPSoxXWwANg/Ed9qmyw/rfU7QYyT.i', 2, 'default.png', 1, '2023-01-13 08:40:01', '2023-01-13 09:19:15'),
-(8, 'Yudha Anoraga', 'yudhaanoraga@gmail.com', '$2y$10$FfxvNNeO6LGkzk8RExv8VOByHZ8wliZLdmtw.cGB9TZLQwBlPdVGm', 3, 'default.png', 1, '2023-01-13 12:30:01', '2023-01-13 12:30:01'),
-(9, 'Diana Puspita', 'diana@gmail.com', '$2y$10$gLOr7jqacu/Ouw4Gjk9Kp.NGSVifFcr/CjO7POXS78KgmqK7RoFFC', 4, 'default.png', 1, '2023-01-13 12:38:37', '2023-01-13 12:38:37'),
-(10, 'Fahmi Pradana', 'fahmi@gmail.com', '$2y$10$nTCzar12o5qlT7u4S9WbmOIlaeJLv1TpfHF.QzX5vbjfQrImHzYMa', 5, 'default.png', 1, '2023-01-13 12:39:13', '2023-01-13 12:39:13');
+(2, 'Aqil Mustaqim', 'admin@gmail.com', '$2y$10$5USqdgHfzCelOpncc2CpAe4Z4jg3dzELSt2R9XbX.pyD1BYE86vCK', 1, 'default.png', 1, '2023-01-13 01:52:10', '2023-02-17 16:15:51'),
+(3, 'Muhammad Nafi Udin', 'pelayan@gmail.com', '$2y$10$rvdXpvAYSDtfquW7Mxxx1Ogbl1Chn3xTrFacbpEMi8ymP2DPd1F4u', 2, 'default.png', 1, '2023-01-13 08:40:01', '2023-02-17 16:16:18'),
+(8, 'Yudha Anoraga', 'kokidinein@gmail.com', '$2y$10$Tp00NFTLlNPt2R4/4/inBuI7GEJsEG8HOZ3AXX6DCKL/mkgECVY2m', 3, 'default.png', 1, '2023-01-13 12:30:01', '2023-02-17 16:17:18'),
+(9, 'Diana Puspita', 'kasir@gmail.com', '$2y$10$k7hsJ5l.18pQ11wr0a64QecRpeGe9Yj5Dy88mMRgeWwkwYbGWEVm2', 4, 'default.png', 1, '2023-01-13 12:38:37', '2023-02-17 16:13:56'),
+(10, 'Fahmi Pradana', 'kokitakeaway@gmail.com', '$2y$10$kF0aWfdrdRUrWUB5nanT.OpoOXwSm6YmOHEb.fV6S5JIESakbe7vu', 5, 'default.png', 1, '2023-01-13 12:39:13', '2023-02-17 16:17:49');
 
 -- --------------------------------------------------------
 
@@ -360,13 +373,13 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `penjualan`
 --
 ALTER TABLE `penjualan`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `penjualan_detail`
 --
 ALTER TABLE `penjualan_detail`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `produk`
@@ -378,7 +391,7 @@ ALTER TABLE `produk`
 -- AUTO_INCREMENT for table `temp_penjualan`
 --
 ALTER TABLE `temp_penjualan`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 
 --
 -- AUTO_INCREMENT for table `users`
