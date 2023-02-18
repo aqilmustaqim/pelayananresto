@@ -34,6 +34,14 @@
                                 <input type="text" id="nama_pelanggan" name="nama_pelanggan" class="form-control input-rounded" placeholder="Nama Pelanggan...">
                             </div>
                             <div class="form-group input-primary col-lg-6">
+                                <label for="" style="font-weight: bold;">Pilih Pelayanan ...</label>
+                                <select id="tipe_pesanan" class="form-control input-rounded" style="border: 1px solid #000000;" name="meja">
+                                    <option value="1"> <b>Dine In</b></option>
+                                    <option value="2"> <b>Take Away</b></option>
+                                </select>
+
+                            </div>
+                            <div class="form-group input-primary col-lg-6">
                                 <label for="" style="font-weight: bold;">Pilih Meja (0 Jika Take Away)...</label>
                                 <select id="meja" class="form-control input-rounded" style="border: 1px solid #000000;" name="meja">
 
@@ -43,14 +51,7 @@
                                 </select>
 
                             </div>
-                            <div class="form-group input-primary col-lg-6">
-                                <label for="" style="font-weight: bold;">Pilih Pelayanan ...</label>
-                                <select id="tipe_pesanan" class="form-control input-rounded" style="border: 1px solid #000000;" name="meja">
-                                    <option value="1"> <b>Dine In</b></option>
-                                    <option value="2"> <b>Take Away</b></option>
-                                </select>
 
-                            </div>
 
                         </div>
 
