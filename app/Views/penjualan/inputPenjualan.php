@@ -20,6 +20,7 @@
                             <div class="form-group col-lg-3">
                                 <label for="" style="font-weight: bold;">Waiters</label>
                                 <input type="text" id="waiters" name="waiters" class="form-control input-rounded" style="border: 1px solid #000000;" value="<?= session()->get('nama'); ?>" readonly>
+                                <input type="hidden" name="idwaiters" id="idwaiters" value="<?= session()->get('id'); ?>">
                             </div>
                             <div class="form-group col-lg-3">
                                 <label for="" style="font-weight: bold;">No Invoice</label>
@@ -309,6 +310,7 @@
                         data: {
                             invoice: $('#invoice').val(),
                             waiters: $('#waiters').val(),
+                            idwaiters: $('#idwaiters').val(),
                             pelanggan: namaPelanggan,
                             meja: $('#meja').val(),
                             tipepesanan: $('#tipe_pesanan').val(),

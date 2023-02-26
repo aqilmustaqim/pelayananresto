@@ -119,6 +119,7 @@
                             <td>
                                 <?php if ($dp['status_menu'] == 0) { ?>
                                     <button class="btn btn-sm light btn-primary prosesMenuPesanan" data-id="<?= $dp['id']; ?>">Proses</button>
+                                    <button class="btn btn-sm light btn-danger hapusMenuPesanan" data-id="<?= $dp['id']; ?>">Hapus</button>
                                 <?php } else { ?>
                                     <button class="btn btn-sm light btn-success">Selesai</button>
                                 <?php } ?>
@@ -165,6 +166,43 @@
                             Swal.fire({
                                 title: 'Proses Menu Pesanan',
                                 text: 'Berhasil Di Proses',
+                                icon: 'success'
+                            }).then((result) => {
+                                document.location.reload();
+                            })
+                        }
+                    }
+                });
+            }
+        })
+    });
+
+    $('.hapusMenuPesanan').on('click', function() {
+        //Ambil Nilai Dari Id dari pesanan_menu
+        const idMenu = $(this).data('id');
+        //Mulai Ajax
+        Swal.fire({
+            title: 'Apakah Anda Yakin?',
+            html: `Menu Pesanan Akan Di Hapus`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Iya, Hapus !'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                //Jalankan Ajax
+                $.ajax({
+                    url: '<?= base_url('dapur/hapusMenuPesanan'); ?>',
+                    method: 'post',
+                    data: {
+                        idMenu: idMenu
+                    },
+                    success: function(data) {
+                        if (data == "berhasil") {
+                            Swal.fire({
+                                title: 'Proses Menu Pesanan',
+                                text: 'Berhasil Di Hapus',
                                 icon: 'success'
                             }).then((result) => {
                                 document.location.reload();

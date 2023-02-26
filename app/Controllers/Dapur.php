@@ -131,6 +131,18 @@ class Dapur extends BaseController
             echo 'berhasil';
         }
     }
+    public function hapusMenuPesanan()
+    {
+        //Ambil ID Menu
+        $idMenu = $this->request->getPost('idMenu');
+
+        //Update Database Penjualan_Detail
+        if ($this->penjualanDetailModel->delete([
+            'id' => $idMenu
+        ])) {
+            echo 'berhasil';
+        }
+    }
 
     public function prosesPesananReady()
     {

@@ -12,8 +12,8 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="card-title">Data Penjualan</h4>
-                        <button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#modalDataPenjualan">Cetak Data Penjualan</button>
+                        <h4 class="card-title">Transaksi Penjualan</h4>
+
                     </div>
 
                     <div class="card-body">
@@ -29,14 +29,13 @@
                                         <th>Total</th>
                                         <th>Tipe</th>
                                         <th>Pesanan</th>
-                                        <th>Kasir</th>
                                         <th>Aksi</th>
 
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php $nomor = 1; ?>
-                                    <?php foreach ($dataPenjualan as $dp) : ?>
+                                    <?php foreach ($transaksipenjualan as $dp) : ?>
                                         <tr>
                                             <td>
                                                 <button class="badge badge-grey"><?= $nomor++; ?></button>
@@ -44,7 +43,7 @@
                                             </td>
                                             <td><?= $dp['invoice']; ?></td>
                                             <td>
-                                                <button class="badge badge-info"><?= $dp['namawaiters']; ?></button>
+                                                <button class="badge badge-info"><?= $dp['nama']; ?></button>
 
                                             </td>
                                             <td><b><?= $dp['pelanggan']; ?></b></td>
@@ -75,14 +74,11 @@
                                                     echo '<button class="badge badge-secondary">Sudah Bayar</button>';
                                                 } ?>
                                             </td> -->
-                                            <td>
-                                                <button class="badge badge-primary"><?= $dp['namakasir']; ?></button>
-
-                                            </td>
 
                                             <td>
 
                                                 <button type="button" class="badge badge-secondary" data-toggle="modal" data-target="#DetailPenjualan<?= $dp['id']; ?>">Detail</button>
+                                                <button type="button" class="badge badge-primary" data-toggle="modal" data-target="#EditPenjualan<?= $dp['id']; ?>">Edit</button>
 
                                             </td>
                                         </tr>
@@ -103,7 +99,7 @@
             Content body end
 ***********************************-->
 
-<?php foreach ($dataPenjualan as $p) : ?>
+<?php foreach ($transaksipenjualan as $p) : ?>
     <div class="modal fade" id="DetailPenjualan<?= $p['id']; ?>">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -150,40 +146,6 @@
     </div>
 <?php endforeach; ?>
 
-<!-- Modal Cetak Data Penjualan -->
-<div class="modal fade" id="modalDataPenjualan">
-    <div class="modal-dialog">
-        <form action="<?= base_url('penjualan/laporanPenjualan'); ?>" method="post">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Cetak Data Penjualan</h5>
-                    <button type="button" class="close" data-dismiss="modal">
-                        <i class="anticon anticon-close"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label>Pilih Tanggal Awal</label>
-                            <input type="date" id="tanggal_awal" name="tanggal_awal" class="form-control">
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label>Pilih Tanggal Akhir</label>
-                            <input type="date" id="tanggal_akhir" name="tanggal_akhir" class="form-control">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Cetak Data</button>
-                    <!-- tombol-cetak-penjualan -->
-                </div>
-        </form>
-    </div>
-</div>
-</div>
 
 
 <script>

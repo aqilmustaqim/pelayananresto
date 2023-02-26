@@ -189,6 +189,7 @@ class Penjualan extends BaseController
 	public function simpanPenjualan()
 	{
 		//Ambil Data Ajax
+		$idwaiters = $this->request->getPost('idwaiters');
 		$waiters  = $this->request->getPost('waiters');
 		$invoice = $this->request->getPost('invoice');
 		$pelanggan = $this->request->getPost('pelanggan');
@@ -211,7 +212,7 @@ class Penjualan extends BaseController
 			'tanggal' => date('Y-m-d'),
 			'pelanggan' => $pelanggan,
 			'total' => $total['total'],
-			'waiters' => $waiters,
+			'waiters' => $idwaiters,
 			'status_pesanan' => 0,
 			'status_pembayaran' => 0,
 			'tipe_pesanan' => $tipepesanan
@@ -395,14 +396,57 @@ class Penjualan extends BaseController
 			}
 		}
 
-		//Ambil Data Penjualan
-		$dataPenjualan = $this->penjualanModel->findAll();
+		//Ambil Data Penjualan Join Dengan Data Users
+		//$dataPenjualan = $this->penjualanModel->findAll();
+
+		$db      = \Config\Database::connect();
+		$builder = $db->table('penjualan');
+		$builder->select('penjualan.id,invoice,tanggal,pelanggan,total,status_pesanan,tipe_pesanan,status_pembayaran,waiters,kasir,a.nama as namawaiters,b.nama as namakasir');
+		$builder->join('users as a', 'penjualan.waiters = a.id');
+		$builder->join('users as b', 'penjualan.kasir = b.id');
+		$builder->where('status_pembayaran', 1);
+		$query = $builder->get();
+		$dataPenjualan = $query->getResultArray();
 		$data = [
 			'title' => 'RestoServe || Data Penjualan',
 			'dataPenjualan' => $dataPenjualan
 		];
 
 		return view('penjualan/dataPenjualan', $data);
+	}
+
+	public function transaksiPenjualan()
+	{
+		//cek status login
+		if (!session()->has('logged_in')) {
+			session()->setFlashdata('login', 'Silahkan Login Terlebih Dahulu !');
+			return redirect()->to(base_url());
+		} else {
+			if (session()->get('role_id') == 3) {
+				return redirect()->to(base_url('koki'));
+			} else if (session()->get('role_id') == 5) {
+				return redirect()->to(base_url('koki'));
+			} else if (session()->get('role_id') == 4) {
+				return redirect()->to(base_url('kasir'));
+			}
+		}
+
+		//Ambil Data Penjualan Join Dengan Data Users
+		//$dataPenjualan = $this->penjualanModel->findAll();
+
+		$db      = \Config\Database::connect();
+		$builder = $db->table('penjualan');
+		$builder->select('penjualan.id,invoice,tanggal,pelanggan,total,status_pesanan,tipe_pesanan,status_pembayaran,waiters,nama');
+		$builder->join('users', 'penjualan.waiters = users.id');
+		$builder->where('status_pembayaran', 0);
+		$query = $builder->get();
+		$transaksipenjualan = $query->getResultArray();
+		$data = [
+			'title' => 'RestoServe || Data Penjualan',
+			'transaksipenjualan' => $transaksipenjualan
+		];
+
+		return view('penjualan/transaksiPenjualan', $data);
 	}
 	public function laporanPenjualan()
 	{

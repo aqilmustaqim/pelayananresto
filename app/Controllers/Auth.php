@@ -78,6 +78,7 @@ class Auth extends BaseController
                     //Kalau Aktif Kasi Session
                     //1.Simpan session usernya
                     $dataSession = [
+                        'id' => $user['id'],
                         'nama' => $user['nama'],
                         'email' => $user['email'],
                         'role_id' => $user['role_id'],

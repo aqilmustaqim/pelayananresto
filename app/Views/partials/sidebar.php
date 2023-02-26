@@ -32,6 +32,7 @@
                         <?php if (session()->get('role_id') == 1) : ?>
                             <li><a href="<?= base_url(); ?>/penjualan/dataPenjualan">Data Penjualan</a></li>
                         <?php endif; ?>
+                        <li><a href="<?= base_url(); ?>/penjualan/transaksiPenjualan">Transaksi Penjualan</a></li>
                     </ul>
                 </li>
             <?php endif; ?>

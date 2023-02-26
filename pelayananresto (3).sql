@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 17, 2023 at 10:18 AM
+-- Generation Time: Feb 19, 2023 at 02:30 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 7.4.28
 
@@ -58,7 +58,7 @@ CREATE TABLE `meja` (
 --
 
 INSERT INTO `meja` (`id`, `nomor_meja`, `status_meja`) VALUES
-(1, 1, 0),
+(1, 1, 1),
 (2, 2, 0),
 (3, 3, 0),
 (4, 4, 0),
@@ -142,7 +142,9 @@ INSERT INTO `penjualan` (`id`, `id_meja`, `invoice`, `tanggal`, `pelanggan`, `to
 (27, 19, 'TRX16022300007', '2023-02-16', 'Ririn', 22000, 1, 1, 2, 'Aqil Mustaqim'),
 (28, 19, 'TRX16022300008', '2023-02-16', 'Mak Beti', 36000, 1, 1, 2, 'Aqil Mustaqim'),
 (29, 1, 'TRX16022300009', '2023-02-16', 'Umum', 10000, 1, 1, 1, 'Muhammad Nafi Udin'),
-(30, 19, 'TRX16022300010', '2023-02-16', 'Tesla', 12000, 1, 1, 2, 'Muhammad Nafi Udin');
+(30, 19, 'TRX16022300010', '2023-02-16', 'Tesla', 12000, 1, 1, 2, 'Muhammad Nafi Udin'),
+(31, 1, 'TRX17022300001', '2023-02-17', 'ASEP', 20000, 1, 1, 1, 'Aqil Mustaqim'),
+(32, 1, 'TRX19022300001', '2023-02-19', 'Umum', 42000, 0, 0, 1, 'Aqil Mustaqim');
 
 -- --------------------------------------------------------
 
@@ -191,7 +193,11 @@ INSERT INTO `penjualan_detail` (`id`, `invoice`, `id_produk`, `harga_beli`, `har
 (35, 'TRX16022300007', 4, 5000, 11000, 2, 22000, 1),
 (36, 'TRX16022300008', 3, 5000, 12000, 3, 36000, 1),
 (37, 'TRX16022300009', 5, 1000, 5000, 2, 10000, 1),
-(38, 'TRX16022300010', 3, 5000, 12000, 1, 12000, 1);
+(38, 'TRX16022300010', 3, 5000, 12000, 1, 12000, 1),
+(39, 'TRX17022300001', 6, 3000, 10000, 2, 20000, 1),
+(40, 'TRX19022300001', 4, 5000, 11000, 1, 11000, 1),
+(41, 'TRX19022300001', 2, 6000, 13000, 2, 26000, 1),
+(42, 'TRX19022300001', 5, 1000, 5000, 1, 5000, 1);
 
 -- --------------------------------------------------------
 
@@ -219,7 +225,8 @@ INSERT INTO `produk` (`id`, `kode_produk`, `nama_produk`, `kategori_produk_id`, 
 (2, 'PRDK002', 'Mie Aceh Goreng', 1, 1, 6000, 13000, '1673631246_b76bfe5f6eb814f3374d.jpeg', 'Mie Aceh Goreng Merupakan Mie Dengan Hasil Gorengan'),
 (3, 'PRDK003', 'Mie Aceh Kepiting', 1, 1, 5000, 12000, '1673631449_29087d3d918f9ed3a65c.jpg', 'Mie Aceh Kepiting Dengan Varian Kuah Enak'),
 (4, 'PRDK004', 'Mie Aceh Kuah Biasa', 1, 1, 5000, 11000, '1673631708_5c19fd3ae4be6f33182d.jpg', 'Mie Aceh Kuah Enak'),
-(5, 'PRDK005', 'Teh Manis Dingin', 2, 1, 1000, 5000, '1675004463_e94184a3176dd8b87550.png', 'Teh Manis Enak');
+(5, 'PRDK005', 'Teh Manis Dingin', 2, 1, 1000, 5000, '1676648453_abf846b2b3992c821d74.jpeg', 'Teh Manis Enak'),
+(6, 'PRDK006', 'Martabak', 1, 1, 3000, 10000, '1676648659_156ebc94d84f339e8c28.jpg', 'Martabak Enak Kali');
 
 -- --------------------------------------------------------
 
@@ -373,25 +380,25 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `penjualan`
 --
 ALTER TABLE `penjualan`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `penjualan_detail`
 --
 ALTER TABLE `penjualan_detail`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT for table `produk`
 --
 ALTER TABLE `produk`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `temp_penjualan`
 --
 ALTER TABLE `temp_penjualan`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `users`
