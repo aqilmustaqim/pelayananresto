@@ -70,6 +70,38 @@ class Penjualan extends BaseController
 		return view('penjualan/inputPenjualan', $data);
 	}
 
+	public function editPenjualan($id)
+	{
+		//cek status login
+		if (!session()->has('logged_in')) {
+			session()->setFlashdata('login', 'Silahkan Login Terlebih Dahulu !');
+			return redirect()->to(base_url());
+		} else {
+			if (session()->get('role_id') == 3) {
+				return redirect()->to(base_url('koki'));
+			} else if (session()->get('role_id') == 5) {
+				return redirect()->to(base_url('koki'));
+			} else if (session()->get('role_id') == 4) {
+				return redirect()->to(base_url('kasir'));
+			}
+		}
+
+		//Ambil Data Penjualan Berdasarkan ID Tersebut
+		$datapenjualan = $this->penjualanModel->where('id', $id)->first();
+
+		$meja = $this->mejaModel->where('status_meja', 0)->findAll();
+
+		$data = [
+			'title' => 'RestoServe || Input Penjualan',
+			'validation' => \Config\Services::validation(),
+			'invoice' => $this->buatInvoice(),
+			'meja' => $meja,
+			'datapenjualan' => $datapenjualan
+		];
+
+		return view('penjualan/editPenjualan', $data);
+	}
+
 	public function buatInvoice()
 	{
 		$tanggal = date('Y-m-d');
@@ -268,6 +300,77 @@ class Penjualan extends BaseController
 		echo '1';
 	}
 
+	public function editsimpanPenjualan()
+	{
+		//Ambil Data Ajax
+
+		$invoice = $this->request->getPost('invoice');
+		$pelanggan = $this->request->getPost('pelanggan');
+
+
+		//Jalankan Query SUM untuk jumlah total detailpesanan
+		$db      = \Config\Database::connect();
+		$builder = $db->table('temp_penjualan');
+		$builder->select('SUM(subtotal) as total');
+		$builder->where('invoice', $invoice);
+		$query = $builder->get();
+		$total = $query->getRowArray();
+
+		//Ambil ID Dari Data Penjualan Berdasarkan Invoice
+		$datapenjualan = $this->penjualanModel->where('invoice', $invoice)->first();
+		$totaltambahan = $total['total'] + $datapenjualan['total'];
+
+		//Masukkan Ke Database Penjualan
+		if ($this->penjualanModel->save([
+			'id' => $datapenjualan['id'],
+			'pelanggan' => $pelanggan,
+			'total' => $totaltambahan,
+			'status_pesanan' => 0
+		])) {
+			// 	//Kalau Berhasil
+			// 	//Masukkan Ke Database Penjualan Detail Dari Tabel Temp
+			$db      = \Config\Database::connect();
+			$builder = $db->table('temp_penjualan');
+			$builder->where('invoice', $invoice);
+			$query = $builder->get();
+			$isiTempPenjualan = $query->getResultArray();
+
+			$DetailPenjualan = [];
+			foreach ($isiTempPenjualan as $row) {
+				$DetailPenjualan[] = [
+					'invoice' => $row['invoice'],
+					'id_produk' => $row['id_produk'],
+					'harga_beli' => $row['harga_beli'],
+					'harga_jual' => $row['harga_jual'],
+					'jumlah' => $row['jumlah'],
+					'subtotal' => $row['subtotal'],
+					'status_menu' => 0
+				];
+			}
+			$db      = \Config\Database::connect();
+			$builder = $db->table('penjualan_detail');
+			$builder->insertBatch($DetailPenjualan);
+
+
+			//Hapus Temp
+			$db      = \Config\Database::connect();
+			$builder = $db->table('temp_penjualan');
+			$builder->emptyTable();
+
+			//Masukkan Data Penjualan Ke Session Untuk Di Cetak Ke Struk
+			// $dataPenjualan = [
+			// 	'invoice' => $invoice,
+			// 	'pelanggan' => $pelanggan,
+			// 	'kasir' => $kasir,
+			// 	'total' => $total,
+			// 	'jumlah_uang' => $jumlahUang,
+			// 	'sisa_uang' => $sisaUang
+			// ];
+			// session()->set($dataPenjualan);
+		}
+		echo '1';
+	}
+
 	public function tampilTotalBayar()
 	{
 
@@ -436,8 +539,9 @@ class Penjualan extends BaseController
 
 		$db      = \Config\Database::connect();
 		$builder = $db->table('penjualan');
-		$builder->select('penjualan.id,invoice,tanggal,pelanggan,total,status_pesanan,tipe_pesanan,status_pembayaran,waiters,nama');
+		$builder->select('penjualan.id,invoice,tanggal,pelanggan,total,status_pesanan,tipe_pesanan,status_pembayaran,waiters,nama,nomor_meja');
 		$builder->join('users', 'penjualan.waiters = users.id');
+		$builder->join('meja', 'penjualan.id_meja = meja.id');
 		$builder->where('status_pembayaran', 0);
 		$query = $builder->get();
 		$transaksipenjualan = $query->getResultArray();
