@@ -203,7 +203,7 @@ class Users extends BaseController
 				'password' => password_hash($password, PASSWORD_DEFAULT)
 			])) {
 				//Kalau Berhasil
-				session()->setFlashdata('users', 'Reset Password');
+				session()->setFlashdata('users', 'Reset Password User');
 				return redirect()->to(base_url('users'));
 			}
 		}

@@ -13,7 +13,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h4 class="card-title">Transaksi Penjualan</h4>
-
+                        <div class="penjualan" data-penjualan="<?= session()->getFlashdata('penjualan'); ?>"></div>
                     </div>
 
                     <div class="card-body">
@@ -97,8 +97,10 @@
                                                     <div class="dropdown-menu dropdown-menu-right border py-0" aria-labelledby="order-dropdown-0">
                                                         <div class="py-2">
 
-                                                            <a class="dropdown-item text-primary" data-toggle="modal" data-target="#DetailPenjualan<?= $dp['id']; ?>">Detail</a>
-                                                            <a class="dropdown-item text-danger" href="<?= base_url(); ?>/penjualan/editPenjualan/<?= $dp['id']; ?>">Edit</a>
+                                                            <a class="dropdown-item text-primary" data-toggle="modal" data-target="#DetailPenjualan<?= $dp['id']; ?>"><i class="fa fa-solid fa-sitemap"></i> Detail</a>
+                                                            <a class="dropdown-item text-success" href="<?= base_url(); ?>/penjualan/editPenjualan/<?= $dp['id']; ?>"><i class="fa fas fa-edit"></i> Edit</a>
+                                                            <a class="dropdown-item text-danger tombol-hapus" href="<?= base_url(); ?>/penjualan/hapusPenjualan/<?= $dp['id']; ?>"><i class="fa fa-solid fa-trash"></i> Hapus</a>
+
                                                         </div>
                                                     </div>
                                                 </div>

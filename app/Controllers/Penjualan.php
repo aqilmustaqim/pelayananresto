@@ -154,6 +154,7 @@ class Penjualan extends BaseController
 		$builder->select('produk.id,kode_produk,nama_produk,kategori_produk_id,kategori,stok_produk');
 		$builder->join('kategori_produk', 'produk.kategori_produk_id = kategori_produk.id');
 		$builder->where('stok_produk', 1);
+		$builder->where('active_produk', 1);
 		$query = $builder->get();
 		$hasil = $query->getResultArray();
 		$data = [
@@ -178,9 +179,10 @@ class Penjualan extends BaseController
 		$builder = $db->table('produk');
 		$builder->select('produk.id,kode_produk,nama_produk,kategori_produk_id,kategori,stok_produk');
 		$builder->join('kategori_produk', 'produk.kategori_produk_id = kategori_produk.id');
-		$builder->where('stok_produk', 1);
 		$builder->like('kode_produk', $kodeproduk);
 		$builder->orLike('nama_produk', $kodeproduk);
+		$builder->where('active_produk', 1);
+		$builder->where('stok_produk', 1);
 		$query = $builder->get();
 		$hasil = $query->getResultArray();
 		$data = [
@@ -206,15 +208,27 @@ class Penjualan extends BaseController
 		$infoProduk = $this->produkModel->where(['kode_produk' => $kodeproduk])->first();
 		$subtotal = floatval($infoProduk['harga_produk']) * $jumlah;
 		//Masukkan Ke Database
-		if ($this->tempPenjualanModel->save([
-			'invoice' => $invoice,
-			'id_produk' => $infoProduk['id'],
-			'jumlah' => $jumlah,
-			'harga_beli' => $infoProduk['modal_produk'],
-			'harga_jual' => $infoProduk['harga_produk'],
-			'subtotal' => $subtotal
-		])) {
-			echo "1";
+		//Cek Kode Produk Uda Ada Belum 
+		$datatemp = $this->tempPenjualanModel->where('id_produk', $infoProduk['id'])->first();
+		if ($datatemp) {
+			if ($this->tempPenjualanModel->save([
+				'id' => $datatemp['id'],
+				'jumlah' => $datatemp['jumlah'] + $jumlah,
+				'subtotal' => $datatemp['subtotal'] + $subtotal
+			])) {
+				echo "1";
+			}
+		} else {
+			if ($this->tempPenjualanModel->save([
+				'invoice' => $invoice,
+				'id_produk' => $infoProduk['id'],
+				'jumlah' => $jumlah,
+				'harga_beli' => $infoProduk['modal_produk'],
+				'harga_jual' => $infoProduk['harga_produk'],
+				'subtotal' => $subtotal
+			])) {
+				echo "1";
+			}
 		}
 	}
 
@@ -450,19 +464,42 @@ class Penjualan extends BaseController
 		}
 	}
 
-	// public function hapusPenjualan($id)
-	// {
+	public function hapusPenjualan($id)
+	{
 
-	// 	$dataPenjualan = $this->penjualanModel->where(['id' => $id])->first();
-	// 	//Hapus Data Yang Ada Di Tabel Penjualan
-	// 	$this->penjualanModel->delete($id);
-	// 	//Hapus Data Yang Ada Di Tabel Detail Penjualan Berdasarkan Invoice Dari Id yang dipilih
-	// 	$db      = \Config\Database::connect();
-	// 	$builder = $db->table('penjualan_detail');
-	// 	$builder->delete(['invoice' => $dataPenjualan['invoice']]);
+		$dataPenjualan = $this->penjualanModel->where(['id' => $id])->first();
+		//Sebelum Di Hapus Cek Apakah Data Pesanannya ada dan apakah status nya sudah di proses
+		$datadetailpenjualan = cek_detail_pesanan($dataPenjualan['invoice']);
 
-	// 	return redirect()->to(base_url('penjualan/dataPenjualan'));
-	// }
+
+		if ($datadetailpenjualan) {
+			//Kalau ada Cek apakah status nya ada yg 0
+			foreach ($datadetailpenjualan as $ddp) {
+				$status = $ddp['status_menu'];
+			}
+			if ($status == 1) {
+				session()->setFlashdata('penjualan', 'Ada Data Yang Sudah Di Proses');
+				return redirect()->to(base_url('penjualan/transaksiPenjualan'));
+			} else {
+				//Hapus Data Penjualan Dan Detailnya
+				if ($this->penjualanModel->delete($id)) {
+					//Kalau Berhasil Hapus Detailnya
+					foreach ($datadetailpenjualan as $detail) {
+						$this->penjualanDetailModel->delete($detail['id']);
+					}
+					//Update Data Meja Nya Jika Ada
+					$this->mejaModel->save([
+						'id' => $dataPenjualan['id_meja'],
+						'status_meja' => 0
+					]);
+
+					return redirect()->to(base_url('penjualan/transaksiPenjualan'));
+				}
+			}
+		} else {
+			echo 'Data Kosong';
+		}
+	}
 
 	// public function print()
 	// {

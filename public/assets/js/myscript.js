@@ -31,6 +31,15 @@ if ( swal ){
         icon: 'success'
     })
 }
+const swal1 = $('.penjualan').data('penjualan'); //Ambil Data FlashDatanya
+if ( swal1 ){
+    //Kalau Ada isinya jalankan sweetalert
+    Swal.fire({
+        title: 'Data Penjualan ',
+        text: 'Gagal, ' + swal1,
+        icon: 'warning'
+    })
+}
 
 const produk = $('.produk').data('produk'); //Ambil Data FlashDatanya
 if ( produk ){

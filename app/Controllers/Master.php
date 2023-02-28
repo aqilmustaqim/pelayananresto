@@ -200,6 +200,7 @@ class Master extends BaseController
         $builder = $db->table('produk');
         $builder->select('produk.*, kategori_produk.kategori');
         $builder->join('kategori_produk', 'produk.kategori_produk_id = kategori_produk.id');
+        $builder->where('active_produk', 1);
         $query = $builder->get();
         $produk = $query->getResultArray();
         $data = [
@@ -292,7 +293,8 @@ class Master extends BaseController
             'harga_produk' => str_replace(',', '', $this->request->getVar('harga_produk')),
             'stok_produk' => $this->request->getVar('stok_produk'),
             'keterangan_produk' => $this->request->getVar('keterangan_produk'),
-            'foto_produk' => $namaFileFoto
+            'foto_produk' => $namaFileFoto,
+            'active_produk' => 1
         ])) {
             //Kalau Berhail
             session()->setFlashdata('produk', 'Ditambahkan');
@@ -403,13 +405,22 @@ class Master extends BaseController
         //Ambil Data Produk Berdasarkan Id Yang mau dihapus
         $dataProduk = $this->produkModel->where(['id' => $id])->first();
         $foto = $dataProduk['foto_produk'];
-        //Langsung Hapus Datanya
-        if ($this->produkModel->delete($id)) {
-            //Hapus Juga Gambar Yang Ada Di Folder
-            unlink("assets/images/product/$foto");
 
+        //Ubah Status Aktifnya Agar Tidak Tampil Lagi
+        if ($this->produkModel->save([
+            'id' => $id,
+            'active_produk' => 0
+        ])) {
             return redirect()->to(base_url('master/produk'));
         }
+
+        //Langsung Hapus Datanya
+        // if ($this->produkModel->delete($id)) {
+        //     //Hapus Juga Gambar Yang Ada Di Folder
+        //     unlink("assets/images/product/$foto");
+
+        //     return redirect()->to(base_url('master/produk'));
+        // }
     }
 
     public function kasKeluar()
