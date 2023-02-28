@@ -95,7 +95,8 @@ class Users extends BaseController
 			'id' => $id,
 			'nama' => $this->request->getVar('nama'),
 			'email' => $this->request->getVar('email'),
-			'role_id' => $this->request->getVar('role')
+			'role_id' => $this->request->getVar('role'),
+			'is_active' => $this->request->getVar('is_active')
 		])) {
 			//Kasih Flash Message
 			session()->setFlashdata('users', 'Diubah');
@@ -184,6 +185,27 @@ class Users extends BaseController
 		} else {
 			session()->setFlashdata('profile', 'Password Lama Anda Salah ! ');
 			return redirect()->to(base_url('users/profile'));
+		}
+	}
+
+	public function resetPassword($id)
+	{
+		//Ambil Inputan Password
+		$password = $this->request->getVar('password');
+
+		if ($password == '') {
+			return redirect()->to(base_url());
+		} else {
+
+			//Edit Database
+			if ($this->usersModel->save([
+				'id' => $id,
+				'password' => password_hash($password, PASSWORD_DEFAULT)
+			])) {
+				//Kalau Berhasil
+				session()->setFlashdata('users', 'Reset Password');
+				return redirect()->to(base_url('users'));
+			}
 		}
 	}
 }

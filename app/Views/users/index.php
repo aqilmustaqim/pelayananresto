@@ -33,6 +33,7 @@
 
                                         <th>Nama</th>
                                         <th>Email</th>
+                                        <th>Role</th>
                                         <th>Status</th>
                                         <th>Bergabung</th>
                                         <th>Aksi</th>
@@ -65,10 +66,20 @@
 
                                                 ?>
                                             </td>
-                                            <td class="py-2"><?= date('d-M-Y', strtotime($u['created_at'])); ?></td>
+                                            <td class="py-2">
+                                                <?php
+                                                if ($u['is_active'] == 1) {
+                                                    echo '<span class="badge badge-pill badge-black font-size-12"> Aktif </span>';
+                                                } else if ($u['is_active'] == 0) {
+                                                    echo '<span class="badge badge-pill badge-black font-size-12"> Tidak Aktif </span>';
+                                                }
+
+                                                ?>
+                                            </td>
+                                            <td class="py-2"><i><?= date('d-M-Y', strtotime($u['created_at'])); ?></i></td>
                                             <td>
                                                 <a href="" class="badge badge-info" data-toggle="modal" data-target="#UbahDataModal<?= $u['id_users']; ?>"><i class="fa fas fa-edit"></i></a>
-                                                <a href="<?= base_url(); ?>/users/hapusData/<?= $u['id_users']; ?>" class="badge badge-danger tombol-hapus"><i class="fa fas fa-trash"></i></i></a>
+                                                <a href="" class="badge badge-danger" data-toggle="modal" data-target="#ResetPasswordModal<?= $u['id_users']; ?>"><i class="fa fa-solid fa-key"></i></a>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
@@ -169,6 +180,15 @@
                                     <?php endforeach; ?>
                                 </select>
                             </div>
+
+                            <div class="form-group col-md-6">
+                                <label>Status...</label>
+                                <select id="inputState" name="is_active" class="form-control" tabindex="-98">
+                                    <option value="<?= $u['is_active']; ?>" selected><?= ($u['is_active'] == 1 ? 'Aktif' : 'Tidak Aktif'); ?></option>
+                                    <option value="1">Aktif</option>
+                                    <option value="0">Tidak Aktif</option>
+                                </select>
+                            </div>
                         </div>
 
 
@@ -177,6 +197,37 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
                         <button type="submit" class="btn btn-primary tombol-ubah">Ubah</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<?php endforeach; ?>
+
+<?php foreach ($users as $u) : ?>
+    <div class="modal fade" id="ResetPasswordModal<?= $u['id_users']; ?>">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Reset Password <b><?= $u['nama']; ?></b></h5>
+                    <button type="button" class="close" data-dismiss="modal">
+                        <i class="anticon anticon-close"></i>
+                    </button>
+                </div>
+                <form action="<?= base_url('users/resetPassword'); ?>/<?= $u['id_users']; ?>" method="post">
+                    <?= csrf_field(); ?>
+                    <div class="modal-body">
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label>Password Reset</label>
+                                <input type="password" name="password" class="form-control" placeholder="Masukkan Password ..." required>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary tombol-reset-password">Reset Password</button>
                     </div>
                 </form>
             </div>
